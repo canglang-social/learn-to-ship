@@ -1,0 +1,139 @@
+# ============================================================================
+#  FICTIONAL demo JD-gap corpus — INVENTED. Safe to commit / publish.
+# ============================================================================
+# This repo is built in public, but the real career data is private (see
+# CLAUDE.md, "Build in public"). Everything below is a MADE-UP example profile
+# for a fictional "Sample Learner" — invented skills, invented JD frequencies,
+# invented self-assessment. It exists only to demo the agent and drive the
+# public eval. It is NOT anyone's real skill map, gap ranking, or job-market
+# analysis, and must not be read as one.
+#
+# The REAL corpus (real frequencies + real self-assessment) is never committed.
+# Point the agent at it with:
+#     export LTS_CORPUS_PATH=/path/to/private/jd-gaps.yaml
+# or, later, a private MCP server. Default (unset) = this fictional demo.
+#
+# Field reference: id, competency, freq (share of JDs, 0..1), level
+# (strong|solid|gap|partial|route_around|edge), priority (gap-ranking slot or
+# null), leverage (closing weight in [0,1] the ranker sorts by), keywords
+# (lowercase match terms). Priorities/leverage here are just an evenly-spaced
+# fictional ladder so the demo has a clear, deterministic order.
+
+version: demo-1
+derived: fictional
+source: INVENTED — "Sample Learner" demo profile, not real career data
+n_jds: 0
+
+gaps:
+  - id: 1
+    competency: Mobile app development (iOS / Android / Flutter)
+    freq: 0.60
+    level: gap
+    priority: 1
+    leverage: 1.00
+    keywords:
+      - mobile
+      - ios
+      - android
+      - flutter
+      - swift
+      - kotlin
+      - react-native
+
+  - id: 2
+    competency: Data engineering & analytics (SQL, warehousing, BI)
+    freq: 0.55
+    level: partial
+    priority: 2
+    leverage: 0.80
+    keywords:
+      - sql
+      - analytics
+      - warehouse
+      - etl
+      - dbt
+      - bigquery
+      - dashboard
+
+  - id: 3
+    competency: Security & authentication (OAuth, encryption)
+    freq: 0.50
+    level: gap
+    priority: 3
+    leverage: 0.60
+    keywords:
+      - security
+      - oauth
+      - auth
+      - encryption
+      - jwt
+      - pentest
+      - vulnerability
+
+  - id: 4
+    competency: Technical writing & communication
+    freq: 0.45
+    level: partial
+    priority: 4
+    leverage: 0.40
+    keywords:
+      - writing
+      - documentation
+      - communication
+      - presentation
+      - tutorial
+
+  - id: 5
+    competency: Backend services (REST, microservices, queues)
+    freq: 0.40
+    level: partial
+    priority: 5
+    leverage: 0.25
+    keywords:
+      - backend
+      - rest
+      - grpc
+      - microservices
+      - queue
+      - worker
+
+  - id: 6
+    competency: Cloud & DevOps (containers, CI/CD)
+    freq: 0.50
+    level: solid
+    priority: null
+    leverage: 0.15
+    keywords:
+      - cloud
+      - docker
+      - kubernetes
+      - ci/cd
+      - terraform
+      - deploy
+
+  - id: 7
+    competency: Frontend UI (React, Vue, CSS)
+    freq: 0.35
+    level: strong
+    priority: null
+    leverage: 0.05
+    keywords:
+      - frontend
+      - react
+      - vue
+      - css
+      - tailwind
+      - typescript
+
+  - id: 8
+    competency: Machine learning (training, MLOps)
+    freq: 0.30
+    level: route_around
+    priority: null
+    leverage: 0.00
+    keywords:
+      - machine-learning
+      - pytorch
+      - tensorflow
+      - training
+      - model

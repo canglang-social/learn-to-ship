@@ -1,0 +1,54 @@
+# Golden eval for focus-director. CI gates on this: if the ranking logic
+# regresses, the expected order stops matching and the build fails.
+#
+# Runs against the FICTIONAL demo corpus (data/jd-gaps.stub.yaml). The candidate
+# set spans every leverage tier so the eval pins the full ordering, not just the
+# top pick. `expected_order` is the study-item id sequence the graph must return.
+
+candidates:
+  - id: e-mobile
+    title: Ship a Flutter mobile app to the app stores
+    tags: [mobile, flutter]
+
+  - id: e-data
+    title: Build an ETL pipeline into the data warehouse
+    tags: [etl, warehouse]
+
+  - id: e-security
+    title: Add OAuth2 authentication and encryption
+    tags: [oauth, auth, security]
+
+  - id: e-writing
+    title: Write onboarding documentation and tutorials
+    tags: [documentation, writing]
+
+  - id: e-backend
+    title: Build a REST microservice with a worker queue
+    tags: [rest, microservices, queue]
+
+  - id: e-cloud
+    title: Containerize the app and deploy to Kubernetes
+    tags: [docker, kubernetes, deploy]
+
+  - id: e-frontend
+    title: Refactor the React frontend with Tailwind
+    tags: [react, frontend, tailwind]
+
+  - id: e-ml
+    title: Train a PyTorch image model
+    tags: [pytorch, training]
+
+  - id: e-nomatch
+    title: Learn to bake sourdough bread
+    tags: [cooking, gardening]
+
+expected_order:
+  - e-mobile     # gap #1 mobile, leverage 1.00
+  - e-data       # gap #2 data engineering, leverage 0.80
+  - e-security   # gap #3 security, leverage 0.60
+  - e-writing    # gap #4 technical writing, leverage 0.40
+  - e-backend    # gap #5 backend services, leverage 0.25
+  - e-cloud      # gap #6 cloud/DevOps, leverage 0.15 (already solid)
+  - e-frontend   # gap #7 frontend, leverage 0.05 (already strong)
+  - e-ml         # gap #8 machine learning, leverage 0.00 (route-around)
+  - e-nomatch    # no gap matched, score 0.00, tie-broken last

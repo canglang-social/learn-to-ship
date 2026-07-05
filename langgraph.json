@@ -1,0 +1,7 @@
+{
+  "dependencies": ["."],
+  "graphs": {
+    "focus_director": "learn_to_ship.graph:graph"
+  },
+  "env": ".env"
+}

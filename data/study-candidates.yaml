@@ -1,0 +1,40 @@
+# Example candidate study list — the input focus-director ranks.
+#
+# Plain list of study items. The learner owns capture; the agent picks up AFTER
+# capture. Each item has an id, a title, and tags used to match it against the
+# JD-gap corpus. These example items are generic and pair with the fictional demo
+# corpus (data/jd-gaps.stub.yaml). Point the CLI at your own list with:
+#   uv run python -m learn_to_ship --candidates path/to/list.yaml
+
+candidates:
+  - id: flutter-course
+    title: Take a Flutter course and ship a small mobile app
+    tags: [flutter, mobile]
+
+  - id: warehouse-etl
+    title: Model a star schema and build an ETL job into the warehouse
+    tags: [etl, warehouse, sql]
+
+  - id: oauth-login
+    title: Implement OAuth2 login with token encryption
+    tags: [oauth, auth, security]
+
+  - id: worker-queue
+    title: Add a background worker queue behind the REST API
+    tags: [queue, worker, rest]
+
+  - id: k8s-deploy
+    title: Containerize a service and deploy it to Kubernetes
+    tags: [docker, kubernetes, deploy]
+
+  - id: react-dashboard
+    title: Rebuild the dashboard UI in React with Tailwind
+    tags: [react, frontend, tailwind]
+
+  - id: pytorch-model
+    title: Train a small PyTorch classifier on a toy dataset
+    tags: [pytorch, training]
+
+  - id: write-tutorial
+    title: Write a tutorial documenting the onboarding flow
+    tags: [documentation, writing]

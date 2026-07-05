@@ -1,0 +1,104 @@
+# spec.md — learn-to-ship
+
+Created 2026-07-05 from the `agent-project` template (forge).
+Pre-spec rationale: `forge/career/decisions/learn-to-ship.md` (the "why").
+This spec is the source of truth for scope once the decision doc is
+scaffolded.
+
+## Problem / Goal
+
+A personal **output-driven learning agent**: I learn *in order to ship an
+output*, and v0's output is **closing a specific job-role gap**. It is the
+deployable-agent form of my existing `learning-loop` (agent-kit `learn`
+skill + Logseq) — a shipped LangGraph agent, cloud-deployed with a CI eval
+harness, so it doubles as a portfolio artifact.
+
+Why now: my private job-hunt analysis flags two high-value gaps to close — a
+*shipped agent on a named framework* (LangGraph) and a *cloud-deployed +
+CI/eval-tracked artifact*. This project closes both in one build while
+generating real daily-usage evidence (I use it every day to decide what to
+study next).
+
+## Goals
+
+- [ ] v0: a thin **LangGraph** agent whose one node is **focus-director** —
+      rank a candidate study list by which JD gap each item unblocks.
+- [ ] Consume a **JD-gap corpus via an MCP tool** (wrap the private career
+      corpus as MCP) — closes the "consumes-an-MCP-tool" JD gap authentically.
+- [ ] **Cloud-deploy** the agent with a **GitHub Actions CI eval harness**
+      (closes the cloud/CI gap alone, low-risk, provably shipped).
+- [ ] Become portfolio case study #2 once running with usage evidence.
+
+## Non-Goals (frozen scope)
+
+- v0 does NOT do capture or `#inbox` triage — **`#inbox` capture is
+  Felix-owned**; the agent never writes attention-capture lines. Triage lands
+  in v1.1.
+- v0 does NOT do focus-guardian (keep-session-on-rails) — v2.
+- v0 does NOT do the blog output stream or Anki/active-recall loop — v1 layers
+  the full output→recall loop on top of the v0 spine.
+- No web UI / DB / service layer in v0.
+
+## Requirements / User stories
+
+- **First story (v0, eval-harness target):** As Felix, I run the agent and it
+  reads my JD-gap corpus (via MCP) plus a candidate study list, then returns a
+  **ranked "study this next, because it unblocks gap X"** with a one-line
+  rationale per item.
+- As Felix, I never hand it `#inbox` capture — it picks up *after* capture.
+
+## Acceptance criteria
+
+- Given the JD-gap corpus + a candidate study list, focus-director returns a
+  deterministic ranked list where each item cites the gap it unblocks.
+- The agent runs as a LangGraph graph (not an ad-hoc script) and reads the
+  corpus through an MCP tool call, not a hardcoded file read.
+- CI (GitHub Actions) runs the eval harness on push; a failing eval fails the
+  build.
+- The agent is reachable as a cloud-deployed endpoint/run, not local-only.
+
+## Constraints
+
+- Python 3.11+, managed with uv.
+- LangGraph as the agent framework (named-framework JD gap is the point).
+- MCP for the corpus read (JD gap is the point) — no direct file read in v0.
+- **Built in public — agent public / career data private.** This repo is
+  public and consumes a PRIVATE career corpus (via MCP). The public eval
+  harness runs on a stub/redacted fixture (fake JD
+  gaps); real corpus reads only from a local/private MCP. Never commit real
+  JD-gap or career data. Publish at milestones (skeleton → stub graph ranks →
+  CI green → deployed → real MCP wired), not on a clock.
+
+## Reused assets (from forge)
+
+- `agent-project` template (forge) — scaffold. [used]
+- **MCP tool over the JD-gap corpus** — built in-repo for v0
+  (`learn_to_ship/mcp_server.py`, tool `get_jd_gaps`). Serves the synthetic stub
+  publicly; the real corpus is wired via `LTS_CORPUS_PATH` / a private MCP.
+  [done — v0] Corpus source is a private competency map, not the raw skills
+  inventory (see Decisions).
+- **bilingual-cards component** (from ragx / the `learn` loop) — for the v1
+  active-recall/Anki layer. Not yet extracted into `reuse/components/`.
+  [planned — v1, not a v0 dependency]
+
+## Decisions taken during the v0 build (2026-07-05)
+
+- **Gap corpus source (spec correction).** The spec pointed at the raw skills
+  inventory, but that is the *skills* side. The actual JD-*gap* data is a private
+  competency map (competencies clustered from logged JDs × frequency × my current
+  level, with an explicit gap-ranking) — focus-director ranks against that.
+- **Candidate study-list format.** A plain YAML list of `{id, title, tags}`
+  (`data/study-candidates.yaml`); the agent picks up after `#inbox` capture. A
+  Logseq-page → list transform is a v1 concern.
+- **MCP server home.** Built in *this* repo for v0 (self-contained, testable,
+  deployable together). May migrate to the private corpus repo later; the agent
+  only depends on the `get_jd_gaps` MCP-tool contract.
+
+## Open questions
+
+- Cloud target for deploy (LangGraph Platform vs. a container on a generic
+  host)? v0 scaffolds `langgraph.json` for **LangGraph Platform** as the default
+  (most credibly "shipped to production" for a LangGraph agent); the endpoint
+  runs locally via `langgraph dev`. Final hosted target still open.
+- Where does the *real* private corpus live — a gitignored file, or a private
+  MCP server this agent points at? (v0 supports either via `LTS_CORPUS_PATH`.)
