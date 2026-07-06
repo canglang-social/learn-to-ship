@@ -16,18 +16,24 @@ from mcp.client.stdio import stdio_client
 
 from .models import Gap
 
-# Launch the server module in *this* interpreter so it shares the venv.
-_SERVER_PARAMS = StdioServerParameters(
-    command=sys.executable,
-    args=["-m", "learn_to_ship.mcp_server"],
-    # Propagate the environment so an LTS_CORPUS_PATH override reaches the server.
-    env=dict(os.environ),
-)
+
+def _server_params() -> StdioServerParameters:
+    """Build the stdio server launch params.
+
+    Read os.environ at call time (not import time) so a LTS_CORPUS_PATH set after
+    this module is imported — e.g. via a .env loaded in __main__, or the deploy's
+    env — still reaches the server subprocess.
+    """
+    return StdioServerParameters(
+        command=sys.executable,  # this interpreter, so the server shares the venv
+        args=["-m", "learn_to_ship.mcp_server"],
+        env=dict(os.environ),
+    )
 
 
 async def fetch_gaps() -> list[Gap]:
     """Fetch the JD-gap corpus through the MCP `get_jd_gaps` tool."""
-    async with stdio_client(_SERVER_PARAMS) as (read, write):
+    async with stdio_client(_server_params()) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()
             result = await session.call_tool("get_jd_gaps", {})

@@ -17,3 +17,5 @@ dist/
 data/*.private.yaml
 data/jd-gaps.yaml
 data/jd-gaps.real.yaml
+# Private, personal study lists (real daily-use inputs).
+data/my-*.yaml

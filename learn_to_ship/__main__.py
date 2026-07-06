@@ -16,11 +16,17 @@ import json
 from pathlib import Path
 
 import yaml
+from dotenv import load_dotenv
 
 from .graph import build_graph
 from .models import StudyItem
 
-DEFAULT_CANDIDATES = Path(__file__).resolve().parent.parent / "data" / "study-candidates.yaml"
+REPO_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_CANDIDATES = REPO_ROOT / "data" / "study-candidates.yaml"
+
+# Load a gitignored .env (e.g. LTS_CORPUS_PATH pointing at the private corpus)
+# before the graph runs, so the setting propagates to the MCP server subprocess.
+load_dotenv(REPO_ROOT / ".env")
 
 
 def load_candidates(path: Path) -> list[StudyItem]:
