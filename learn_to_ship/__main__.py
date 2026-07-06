@@ -75,7 +75,9 @@ def cmd_recall(args: argparse.Namespace) -> None:
         return
 
     if not has_api_key():
-        print("(no ANTHROPIC_API_KEY — format checks only; set a key for complexity + correctness)\n")
+        print(
+            "(no ANTHROPIC_API_KEY — format checks only; set a key for complexity + correctness)\n"
+        )
 
     if not reviews:
         print("No #card blocks found.")
