@@ -76,6 +76,33 @@ candidates:
     tags: [docker, kubernetes, deploy]
 ```
 
+## Recall check (v1) — you author cards, it checks them
+
+The other half of the learning loop: study → produce an output → recall. Active
+recall works *because you phrase the card yourself*, so learn-to-ship never
+generates cards — you write them, in canonical Logseq `#card` format, and a
+second graph (`card-reviewer`) checks each one:
+
+- **format** (deterministic, no key) — bilingual EN+中文 present, tag order,
+  valid `#q/why|how|apply`.
+- **complexity + correctness** (Claude) — is it one atomic idea? is the answer
+  right / supported by your source? It flags problems; it never rewrites.
+
+```bash
+# Format checks only (no key needed):
+uv run python -m learn_to_ship recall --cards my-cards.md
+
+# Full check — needs ANTHROPIC_API_KEY (in .env). --material grounds correctness:
+uv run python -m learn_to_ship recall --cards my-cards.md --material README.md
+```
+
+Local-only (needs your key; the hosted deploy stays rank-only). Cards look like:
+
+```text
+- Why rank by leverage, not JD frequency? 为什么按 leverage 而非 JD 频率排序？ #card #lts #lts/ranking #q/why
+	- Leverage folds frequency × distance-from-level. Leverage 综合频率×水平差距。
+```
+
 ## Serve it (deployed endpoint)
 
 ```bash
@@ -109,6 +136,8 @@ build. The eval is hermetic — no API key, no network.
 - [x] Runs as a served endpoint (`langgraph dev`); deploy config in `langgraph.json`
 - [x] Real private corpus wired for daily use via `LTS_CORPUS_PATH`
 - [x] Cloud-deployed as a live endpoint (Hugging Face Spaces) — see `DEPLOY.md`
+- [x] v1 recall loop — `card-reviewer` graph checks your hand-written cards
+      (format + complexity + correctness), local-only
 
-**v0 complete.** See `spec.md` for scope and non-goals, `DEPLOY.md` to reproduce
-the deploy, `LOG.md` for the build trail.
+**v0 complete; v1 recall-checker shipped.** See `spec.md` for scope, `DEPLOY.md`
+to reproduce the deploy, `LOG.md` for the build trail.

@@ -71,3 +71,59 @@ class RankedItem:
             "gap_priority": None if self.gap is None else self.gap.priority,
             "rationale": self.rationale,
         }
+
+
+# --- v1: recall-card checker --------------------------------------------------
+# You author the cards (phrasing them is the studying); learn-to-ship only checks
+# them. A card is a Logseq #card block with a bilingual front/back.
+
+QTYPES = ("why", "how", "apply")
+
+
+@dataclass(frozen=True)
+class Card:
+    """One human-authored flashcard, parsed from a Logseq #card block."""
+
+    front_en: str
+    front_zh: str
+    back_en: str
+    back_zh: str
+    topic: str  # broad slug, e.g. "agent-kit"
+    subtopic: str  # hierarchical slug, e.g. "profile-delivery"
+    qtype: str  # one of QTYPES
+    raw: str  # the original block text, for error reporting
+
+    @property
+    def tags(self) -> str:
+        return f"#card #{self.topic} #{self.topic}/{self.subtopic} #q/{self.qtype}"
+
+
+@dataclass(frozen=True)
+class CardIssue:
+    """One problem found with a card. kind = format | complexity | correctness."""
+
+    kind: str
+    severity: str  # "warn" | "error"
+    message: str
+
+    def to_dict(self) -> dict:
+        return {"kind": self.kind, "severity": self.severity, "message": self.message}
+
+
+@dataclass(frozen=True)
+class CardReview:
+    """A card plus the issues found in it."""
+
+    card: Card
+    issues: tuple[CardIssue, ...]
+
+    @property
+    def verdict(self) -> str:
+        return "ok" if not self.issues else "needs_work"
+
+    def to_dict(self) -> dict:
+        return {
+            "front": f"{self.card.front_en} {self.card.front_zh}".strip(),
+            "verdict": self.verdict,
+            "issues": [i.to_dict() for i in self.issues],
+        }

@@ -28,6 +28,11 @@ study next).
 - [ ] **Cloud-deploy** the agent with a **GitHub Actions CI eval harness**
       (closes the cloud/CI gap alone, low-risk, provably shipped).
 - [ ] Become portfolio case study #2 once running with usage evidence.
+- [x] **v1: the recall loop, as a card *checker*.** You author the flashcards
+      (phrasing them is the studying — never LLM-generated); a second LangGraph
+      graph, `card-reviewer`, checks each card for **complexity** (atomicity) and
+      **correctness** (via Claude), plus a deterministic Logseq-format lint.
+      Local-only; hermetic CI (Claude behind an injectable stub).
 
 ## Non-Goals (frozen scope)
 
@@ -35,8 +40,8 @@ study next).
   Felix-owned**; the agent never writes attention-capture lines. Triage lands
   in v1.1.
 - v0 does NOT do focus-guardian (keep-session-on-rails) — v2.
-- v0 does NOT do the blog output stream or Anki/active-recall loop — v1 layers
-  the full output→recall loop on top of the v0 spine.
+- v1's recall loop is a card **checker**, not a generator: the human authors the
+  cards; the agent only critiques (see Goals). The blog output stream stays out.
 - No web UI / DB / service layer in v0.
 
 ## Requirements / User stories

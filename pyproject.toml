@@ -39,3 +39,7 @@ target-version = "py311"
 asyncio_mode = "auto"
 testpaths = ["tests"]
 pythonpath = ["."]
+# `live` tests hit the real Claude API; deselect by default (CI runs without a key).
+# Run them with: uv run pytest -m live
+addopts = "-m 'not live'"
+markers = ["live: exercises the real Claude API (needs ANTHROPIC_API_KEY)"]
