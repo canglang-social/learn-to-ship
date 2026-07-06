@@ -1,56 +1,69 @@
 # Deploy
 
-The agent is packaged for deployment as a hosted API. `langgraph.json` registers
-the `focus_director` graph; `langgraph dockerfile` / `langgraph build` produce a
-standard container image from it.
+The agent ships as a small FastAPI container (`learn_to_ship/server.py` +
+`Dockerfile`) exposing:
 
-> **The hosted deploy runs the public stub, on purpose.** A cloud service must
-> never hold the private career corpus. Do **not** set `LTS_CORPUS_PATH` in a
-> hosted deploy — leave it unset so the endpoint serves the fictional
-> `data/jd-gaps.stub.yaml`. The real corpus stays local (see README).
+- `GET  /` — health check
+- `POST /rank` — `{"candidates": [{id, title, tags}]}` → ranked list
 
-## Option A — LangGraph Platform (recommended)
+> **The hosted deploy serves the public stub, on purpose.** `.env` and the real
+> corpus are `.dockerignore`'d, and the server never loads `.env`, so a container
+> has no `LTS_CORPUS_PATH` and serves the fictional `data/jd-gaps.stub.yaml`. The
+> private corpus stays on your machine (see README). Do not set `LTS_CORPUS_PATH`
+> on a hosted deploy.
 
-No Docker needed locally; LangGraph Platform builds and hosts from the public
-GitHub repo.
-
-1. Go to <https://smith.langchain.com> → **Deployments** → **+ New Deployment**.
-2. Connect GitHub and pick `canglang-social/learn-to-ship`, branch `main`.
-3. It auto-detects `langgraph.json` (graph `focus_director`). Leave env vars
-   empty (the stub is the default — no `LTS_CORPUS_PATH`).
-4. **Submit** → wait for the build. You get a hosted API URL + an API key.
-
-Smoke-test the live endpoint:
+## Run the container locally (needs Docker)
 
 ```bash
-curl -s -X POST "$DEPLOY_URL/runs/wait" \
-  -H "x-api-key: $LANGSMITH_API_KEY" \
+docker build -t learn-to-ship .
+docker run --rm -p 7860:7860 learn-to-ship
+curl -s localhost:7860/ && curl -s -X POST localhost:7860/rank \
   -H 'content-type: application/json' \
-  -d '{"assistant_id":"focus_director","input":{"candidates":[
-        {"id":"a","title":"Deploy to a cloud container","tags":["cloud","deploy"]}]}}'
+  -d '{"candidates":[{"id":"a","title":"Deploy to a cloud container","tags":["cloud","deploy"]}]}'
 ```
 
-## Option B — Container to a generic host (Fly.io / Render / Railway)
+## Option A — Hugging Face Spaces (free, recommended)
 
-Needs Docker running locally.
+Free public Docker hosting with a shareable URL. No LangGraph Platform, no
+subscription.
 
-```bash
-# Build the image from langgraph.json
-uv run langgraph build -t learn-to-ship
+1. Create a **Docker** Space at <https://huggingface.co/new-space> (SDK: Docker,
+   blank template). You get a git repo with a `README.md` (keep its frontmatter)
+   and a starter `Dockerfile`.
+2. Put this project's code in that Space repo — simplest is to point its
+   `Dockerfile` at this public repo. Replace the Space's `Dockerfile` with:
 
-# Run it locally to verify (LangGraph API on :8000)
-docker run --rm -p 8000:8000 learn-to-ship
+   ```dockerfile
+   FROM python:3.11-slim
+   COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+   RUN useradd -m -u 1000 user
+   USER user
+   ENV HOME=/home/user PATH=/home/user/.local/bin:$PATH
+   WORKDIR /home/user/app
+   RUN git clone --depth 1 https://github.com/canglang-social/learn-to-ship.git .
+   RUN uv sync --frozen --no-dev
+   EXPOSE 7860
+   CMD ["uv","run","--no-sync","uvicorn","learn_to_ship.server:app","--host","0.0.0.0","--port","7860"]
+   ```
 
-# Then push to your host's registry and deploy per that host's docs, e.g. Fly:
-#   fly launch --image learn-to-ship
-```
+   (Or clone this repo into the Space and use the committed `Dockerfile` as-is.)
+3. Commit → the Space builds and goes live at
+   `https://<user>-learn-to-ship.hf.space`. Test:
 
-The image serves the same `/runs/wait` API as Option A.
+   ```bash
+   curl -s https://<user>-learn-to-ship.hf.space/
+   ```
 
-## Regenerate the Dockerfile
+## Option B — Render / Fly.io / Railway (free-ish)
 
-The `Dockerfile` is a generated artifact (gitignored). Regenerate any time:
+Any host that builds a Dockerfile works; the committed `Dockerfile` listens on
+`7860` (override the port via the host's config if needed). Point the host at
+this GitHub repo, or `docker push` the image to its registry.
 
-```bash
-uv run langgraph dockerfile Dockerfile
-```
+## Option C — LangGraph Platform Cloud (paid)
+
+Turnkey but **$39/mo** (LangSmith Plus; the free tier includes no deployments).
+`langgraph.json` registers the graph, so if you later want the managed platform:
+connect this repo at <https://smith.langchain.com> → Deployments. Free
+self-hosted "Lite" (≤1M node-runs/yr) is also possible via the official
+`langgraph build` image + a free LangSmith API key.

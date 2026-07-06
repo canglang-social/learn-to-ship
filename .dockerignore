@@ -1,0 +1,15 @@
+# Keep the image small and — critically — free of private data.
+.git/
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.langgraph_api/
+dist/
+.DS_Store
+
+# Never bake private data / config into a public image.
+.env
+data/my-*.yaml
+data/jd-gaps.real.yaml
+data/jd-gaps.private.yaml
