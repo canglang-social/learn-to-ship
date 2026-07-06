@@ -8,6 +8,8 @@ dist/
 
 # LangGraph dev-server local runtime state
 .langgraph_api/
+# Generated deploy artifact (regenerate with: langgraph dockerfile Dockerfile)
+Dockerfile
 
 # Secrets
 .env
