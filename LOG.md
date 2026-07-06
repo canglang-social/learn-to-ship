@@ -4,6 +4,19 @@ Dated milestones for learn-to-ship. Newest first. Each entry marks a real
 shipping step (skeleton → stub graph ranks → CI eval green → deployed → real
 corpus wired), per the build-in-public rule in CLAUDE.md.
 
+## 2026-07-06 — cloud-deployed, live endpoint
+
+v0 is fully shipped. The agent runs as a live cloud endpoint, closing the last
+acceptance criterion (reachable as a deployed endpoint, not local-only).
+
+- Served via a small FastAPI layer (`learn_to_ship/server.py`) in a container,
+  deployed **free** to Hugging Face Spaces — no paid LangGraph Platform needed.
+- Live: <https://vegekiwi-learn-to-ship.hf.space> (`GET /` health, `POST /rank`).
+- The hosted deploy serves the public fictional stub; the private corpus never
+  leaves local (`.env` + real corpus are `.dockerignore`'d).
+
+That completes every v0 goal and acceptance criterion in `spec.md`.
+
 ## 2026-07-06 — v0 shipped public, CI green
 
 First public ship. The whole v0 spine is live and proven end to end.

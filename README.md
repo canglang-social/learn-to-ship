@@ -8,9 +8,17 @@ it closes.
 It's a thin [LangGraph](https://langchain-ai.github.io/langgraph/) agent with one
 node, **focus-director**, that reads a JD-gap corpus **through an MCP tool** and
 ranks a candidate study list deterministically by closing-leverage. It ships with
-a GitHub Actions eval harness and a LangGraph deploy config, so it doubles as a
+a GitHub Actions eval harness and a live cloud deploy, so it doubles as a
 portfolio artifact for the exact gaps it reasons about (a shipped agent on a named
 framework; a cloud-deployed, CI/eval-tracked build).
+
+**Live:** <https://vegekiwi-learn-to-ship.hf.space> (serves the public demo corpus)
+
+```bash
+curl -s -X POST https://vegekiwi-learn-to-ship.hf.space/rank \
+  -H 'content-type: application/json' \
+  -d '{"candidates":[{"id":"a","title":"Deploy to a cloud container","tags":["cloud","deploy"]}]}'
+```
 
 ## How it works
 
@@ -100,7 +108,7 @@ build. The eval is hermetic — no API key, no network.
 - [x] CI eval harness (GitHub Actions) — a failing eval fails the build
 - [x] Runs as a served endpoint (`langgraph dev`); deploy config in `langgraph.json`
 - [x] Real private corpus wired for daily use via `LTS_CORPUS_PATH`
-- [~] Deploy artifact ready + validated (`DEPLOY.md`); hosted deploy pending a
-      LangGraph Platform / host account
+- [x] Cloud-deployed as a live endpoint (Hugging Face Spaces) — see `DEPLOY.md`
 
-See `spec.md` for scope and non-goals, `DEPLOY.md` to ship it, `LOG.md` for the trail.
+**v0 complete.** See `spec.md` for scope and non-goals, `DEPLOY.md` to reproduce
+the deploy, `LOG.md` for the build trail.
