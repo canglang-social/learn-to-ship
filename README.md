@@ -99,7 +99,8 @@ build. The eval is hermetic — no API key, no network.
 - [x] JD-gap corpus consumed via an MCP tool
 - [x] CI eval harness (GitHub Actions) — a failing eval fails the build
 - [x] Runs as a served endpoint (`langgraph dev`); deploy config in `langgraph.json`
-- [ ] Cloud deploy pushed to a hosted target (needs a LangGraph Platform / host account)
-- [ ] Real private corpus wired via a private MCP
+- [x] Real private corpus wired for daily use via `LTS_CORPUS_PATH`
+- [~] Deploy artifact ready + validated (`DEPLOY.md`); hosted deploy pending a
+      LangGraph Platform / host account
 
-See `spec.md` for scope and non-goals.
+See `spec.md` for scope and non-goals, `DEPLOY.md` to ship it, `LOG.md` for the trail.
