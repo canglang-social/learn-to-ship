@@ -61,12 +61,14 @@ class ClaudeCardChecker:
 
     def _get_runnable(self):
         if self._runnable is None:
+            from typing import Literal
+
             from langchain_anthropic import ChatAnthropic
             from pydantic import BaseModel, Field
 
             class _Issue(BaseModel):
-                kind: str = Field(description="'complexity' or 'correctness'")
-                severity: str = Field(description="'warn' or 'error'")
+                kind: Literal["complexity", "correctness"]
+                severity: Literal["warn", "error"]
                 message: str = Field(
                     description="one sentence; what is wrong and, for complexity, what to split"
                 )
@@ -80,10 +82,7 @@ class ClaudeCardChecker:
         return self._runnable
 
     def check(self, card: Card, material: str | None) -> list[CardIssue]:
-        human = (
-            f"Front (EN): {card.front_en}\nFront (中文): {card.front_zh}\n"
-            f"Back (EN): {card.back_en}\nBack (中文): {card.back_zh}\n"
-        )
+        human = f"Card front: {card.front}\nCard back: {card.back}\n"
         if material:
             human += f"\nSource material the card should be consistent with:\n{material}\n"
 

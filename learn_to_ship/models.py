@@ -82,12 +82,17 @@ QTYPES = ("why", "how", "apply")
 
 @dataclass(frozen=True)
 class Card:
-    """One human-authored flashcard, parsed from a Logseq #card block."""
+    """One human-authored flashcard, parsed from a Logseq #card block.
 
-    front_en: str
-    front_zh: str
-    back_en: str
-    back_zh: str
+    front/back are the whole bilingual strings as written (EN + 中文 together).
+    We deliberately do NOT split them into language halves — the vault pairs key
+    terms inline as `term (中文)`, which no split heuristic survives, and nothing
+    downstream needs the halves (the lint checks that both scripts are present;
+    Claude reads bilingual text directly).
+    """
+
+    front: str
+    back: str
     topic: str  # broad slug, e.g. "agent-kit"
     subtopic: str  # hierarchical slug, e.g. "profile-delivery"
     qtype: str  # one of QTYPES
@@ -123,7 +128,7 @@ class CardReview:
 
     def to_dict(self) -> dict:
         return {
-            "front": f"{self.card.front_en} {self.card.front_zh}".strip(),
+            "front": self.card.front,
             "verdict": self.verdict,
             "issues": [i.to_dict() for i in self.issues],
         }

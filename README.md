@@ -5,12 +5,13 @@ question — *"of everything I could study next, which item unblocks the most
 valuable job-role gap?"* — and returns a ranked list, each item citing the gap
 it closes.
 
-It's a thin [LangGraph](https://langchain-ai.github.io/langgraph/) agent with one
-node, **focus-director**, that reads a JD-gap corpus **through an MCP tool** and
-ranks a candidate study list deterministically by closing-leverage. It ships with
-a GitHub Actions eval harness and a live cloud deploy, so it doubles as a
-portfolio artifact for the exact gaps it reasons about (a shipped agent on a named
-framework; a cloud-deployed, CI/eval-tracked build).
+Its core is a thin [LangGraph](https://langchain-ai.github.io/langgraph/) node,
+**focus-director**, that reads a JD-gap corpus **through an MCP tool** and ranks a
+candidate study list deterministically by closing-leverage. v1 adds a second
+graph, **card-reviewer**, that checks the flashcards you write (see below). It
+ships with a GitHub Actions eval harness and a live cloud deploy, so it doubles as
+a portfolio artifact for the exact gaps it reasons about (a shipped agent on a
+named framework; a cloud-deployed, CI/eval-tracked build).
 
 **Live:** <https://vegekiwi-learn-to-ship.hf.space> (serves the public demo corpus)
 
