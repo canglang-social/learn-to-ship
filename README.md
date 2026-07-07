@@ -23,7 +23,9 @@ curl -s -X POST https://vegekiwi-learn-to-ship.hf.space/rank \
 
 ## How it works
 
-```
+Two thin graphs. **rank** (v0, the default) — *what should I study next?*
+
+```text
 candidate study list ─┐
                       ▼
               ┌───────────────┐     MCP call      ┌──────────────────┐
@@ -35,13 +37,27 @@ candidate study list ─┐
       ranked "study this next, because it unblocks gap X"
 ```
 
-- **focus-director** (`learn_to_ship/graph.py`) — the agent's single node. Fetches
+**recall** (v1) — *you author the cards, it checks them:*
+
+```text
+your #card blocks ─┐
+                   ▼
+          ┌────────────────┐  ── format lint (deterministic) ──┐
+          │  card-reviewer  │                                   ├─▶ per-card review
+          │   (one node)    │  ── complexity + correctness ─────┘
+          └────────────────┘        (Claude, when a key is set)
+```
+
+- **focus-director** (`learn_to_ship/graph.py`) — the rank graph's node. Fetches
   the gap corpus over MCP, then applies a **deterministic** ranker.
 - **ranker** (`learn_to_ship/ranker.py`) — pure function. Matches each study item
   to the gap it unblocks (word-anchored keyword match) and sorts by the gap's
   closing-leverage. Same inputs → same order, always.
 - **MCP server** (`learn_to_ship/mcp_server.py`) — the *only* thing that reads the
   corpus file; exposes `get_jd_gaps`. The agent never reads the corpus directly.
+- **card-reviewer** (`learn_to_ship/recall_graph.py`) — the recall graph's node.
+  Runs a deterministic Logseq-format lint (`logseq.py`) plus an injectable content
+  check (`recall.py`; Claude for complexity + correctness). It critiques; you author.
 
 ## Public agent, private data
 
@@ -121,13 +137,16 @@ curl -X POST localhost:2024/runs/wait \
 ## Test / lint / eval
 
 ```bash
-uv run pytest            # unit tests + MCP round-trip + the golden eval harness
+uv run pytest            # hermetic: ranker, MCP round-trip, golden eval, card parse/lint
+uv run pytest -m live    # also runs the real-Claude card checks (needs ANTHROPIC_API_KEY)
 uv run ruff check .
 ```
 
-CI (`.github/workflows/ci.yml`) runs lint + the eval on every push. The eval pins
-the full ranked order against `evals/cases.yaml`; a ranking regression fails the
-build. The eval is hermetic — no API key, no network.
+CI (`.github/workflows/ci.yml`) runs lint + the hermetic suite on every push. The
+golden eval pins the full ranked order against `evals/cases.yaml`; a ranking
+regression fails the build. Everything in CI is hermetic — no API key, no network:
+the recall checker's Claude call sits behind an injectable stub, and the `live`
+tests (real Claude) are deselected by default.
 
 ## Status
 
