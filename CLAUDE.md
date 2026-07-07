@@ -8,8 +8,10 @@ my existing `learning-loop` — a LangGraph agent, cloud-deployed with a CI eval
 harness, doubling as a portfolio artifact. v0 is a thin agent whose one node
 (`focus-director`) ranks a candidate study list by which JD gap each item
 unblocks, reading the JD-gap corpus through an MCP tool. It is NOT a capture
-tool — `#inbox` capture is Felix-owned; the agent picks up after capture.
-Keep `spec.md` the source of truth for scope.
+tool — `#inbox` capture is Felix-owned; the agent picks up after capture. v1
+adds a second graph, `card-reviewer`, that checks flashcards I author (format +
+complexity + correctness); it never generates cards. Keep `spec.md` the source
+of truth for scope.
 
 ## Tech stack
 
@@ -18,8 +20,10 @@ Keep `spec.md` the source of truth for scope.
 ## Commands
 
 - Env: uv sync
-- Run: uv run python -m learn_to_ship
-- Test: uv run pytest
+- Run (rank): uv run python -m learn_to_ship
+- Run (recall): uv run python -m learn_to_ship recall --cards <file> [--material <file>]
+- Serve: uv run langgraph dev   (or the FastAPI server — see DEPLOY.md)
+- Test: uv run pytest           (add -m live for the real-Claude card checks)
 - Lint: uv run ruff check . && uv run ruff format .
 
 ## Conventions

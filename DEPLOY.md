@@ -1,10 +1,13 @@
 # Deploy
 
-The agent ships as a small FastAPI container (`learn_to_ship/server.py` +
-`Dockerfile`) exposing:
+The hosted agent ships as a small FastAPI container (`learn_to_ship/server.py` +
+`Dockerfile`) exposing the **rank** graph only:
 
 - `GET  /` — health check
 - `POST /rank` — `{"candidates": [{id, title, tags}]}` → ranked list
+
+(The v1 **recall** card-checker is not hosted — it needs your Anthropic key and
+runs locally; see the README. So the deploy stays keyless and free.)
 
 > **The hosted deploy serves the public stub, on purpose.** `.env` and the real
 > corpus are `.dockerignore`'d, and the server never loads `.env`, so a container
@@ -66,7 +69,8 @@ this GitHub repo, or `docker push` the image to its registry.
 ## Option C — LangGraph Platform Cloud (paid)
 
 Turnkey but **$39/mo** (LangSmith Plus; the free tier includes no deployments).
-`langgraph.json` registers the graph, so if you later want the managed platform:
-connect this repo at <https://smith.langchain.com> → Deployments. Free
+`langgraph.json` registers both graphs (`focus_director`, `card_reviewer`), so if
+you later want the managed platform: connect this repo at
+<https://smith.langchain.com> → Deployments. Free
 self-hosted "Lite" (≤1M node-runs/yr) is also possible via the official
 `langgraph build` image + a free LangSmith API key.

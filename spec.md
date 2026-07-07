@@ -21,13 +21,14 @@ study next).
 
 ## Goals
 
-- [ ] v0: a thin **LangGraph** agent whose one node is **focus-director** —
+- [x] v0: a thin **LangGraph** agent whose one node is **focus-director** —
       rank a candidate study list by which JD gap each item unblocks.
-- [ ] Consume a **JD-gap corpus via an MCP tool** (wrap the private career
+- [x] Consume a **JD-gap corpus via an MCP tool** (wrap the private career
       corpus as MCP) — closes the "consumes-an-MCP-tool" JD gap authentically.
-- [ ] **Cloud-deploy** the agent with a **GitHub Actions CI eval harness**
-      (closes the cloud/CI gap alone, low-risk, provably shipped).
-- [ ] Become portfolio case study #2 once running with usage evidence.
+- [x] **Cloud-deploy** the agent with a **GitHub Actions CI eval harness**
+      (deployed free to Hugging Face Spaces; CI eval gates every push).
+- [~] Become portfolio case study #2 — repo public + blog post drafted; publish
+      the post to complete.
 - [x] **v1: the recall loop, as a card *checker*.** You author the flashcards
       (phrasing them is the studying — never LLM-generated); a second LangGraph
       graph, `card-reviewer`, checks each card for **complexity** (atomicity) and
@@ -42,7 +43,9 @@ study next).
 - v0 does NOT do focus-guardian (keep-session-on-rails) — v2.
 - v1's recall loop is a card **checker**, not a generator: the human authors the
   cards; the agent only critiques (see Goals). The blog output stream stays out.
-- No web UI / DB / service layer in v0.
+- No web UI / DB in v0. The one service layer is a thin FastAPI wrapper
+  (`server.py`) that exposes the rank graph for the hosted deploy — no business
+  logic of its own; recall stays local (needs a key + writes nothing hosted).
 
 ## Requirements / User stories
 
@@ -82,9 +85,11 @@ study next).
   publicly; the real corpus is wired via `LTS_CORPUS_PATH` / a private MCP.
   [done — v0] Corpus source is a private competency map, not the raw skills
   inventory (see Decisions).
-- **bilingual-cards component** (from ragx / the `learn` loop) — for the v1
-  active-recall/Anki layer. Not yet extracted into `reuse/components/`.
-  [planned — v1, not a v0 dependency]
+- **bilingual `#card` convention** (from the agent-kit `learn` skill + ragx
+  `/card`) — reused by v1's card-reviewer. There is no importable code component:
+  it's a Logseq-format convention + a review approach, reproduced in
+  `learn_to_ship/logseq.py` (parse/lint) and `recall.py` (the Claude check).
+  [done — v1]
 
 ## Decisions taken during the v0 build (2026-07-05)
 
@@ -99,11 +104,19 @@ study next).
   deployable together). May migrate to the private corpus repo later; the agent
   only depends on the `get_jd_gaps` MCP-tool contract.
 
+## Resolved during the deploy + v1 build (2026-07-06/07)
+
+- **Cloud target — Hugging Face Spaces (free).** LangGraph Platform Cloud costs
+  $39/mo, so v0 deploys a thin FastAPI container to a free HF Docker Space
+  instead. `langgraph.json` is kept for `langgraph dev` and the paid/Lite
+  LangGraph Platform path (see `DEPLOY.md`). Live:
+  <https://vegekiwi-learn-to-ship.hf.space>.
+- **Real private corpus — a gitignored file in the sibling `job_hunting` repo**
+  (`../job_hunting/data/jd-gaps.real.yaml`), wired via `LTS_CORPUS_PATH` (relative
+  paths resolve against the repo root). A private MCP server remains an option;
+  the agent only needs `LTS_CORPUS_PATH` to point somewhere.
+
 ## Open questions
 
-- Cloud target for deploy (LangGraph Platform vs. a container on a generic
-  host)? v0 scaffolds `langgraph.json` for **LangGraph Platform** as the default
-  (most credibly "shipped to production" for a LangGraph agent); the endpoint
-  runs locally via `langgraph dev`. Final hosted target still open.
-- Where does the *real* private corpus live — a gitignored file, or a private
-  MCP server this agent points at? (v0 supports either via `LTS_CORPUS_PATH`.)
+- Publish the case-study blog post (drafted in the `blog` repo) to close Goal 4.
+- Add usage-evidence capture (I run it daily; nothing records that yet).

@@ -4,6 +4,22 @@ Dated milestones for learn-to-ship. Newest first. Each entry marks a real
 shipping step (skeleton → stub graph ranks → CI eval green → deployed → real
 corpus wired), per the build-in-public rule in CLAUDE.md.
 
+## 2026-07-07 — v1 hardening: self-audit + parser fixes
+
+Reviewed the recall checker and found three real parser bugs, all fixed with
+regression tests:
+
+- the EN/中文 split corrupted cards that pair terms inline as `term (中文)` — the
+  vault's own convention. Root fix: stop splitting; store the whole bilingual
+  front/back, and let the lint check only that both scripts are present.
+- an `id::` / `deck::` property line between front and back dropped the back
+  (false "missing back"); the back scan now skips property lines.
+- `#card-group` (cloze/image groups) false-matched as `#card`; the tag is now
+  matched as a whole word.
+
+Also constrained the LLM checker's `kind`/`severity` to enums, and completed the
+README (the How-it-works + test sections still described only v0). 25 tests green.
+
 ## 2026-07-06 — v1 recall loop: a card *checker*, not a generator
 
 Closed the learning loop's other half — study → produce an output → recall —
