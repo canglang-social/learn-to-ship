@@ -4,6 +4,21 @@ Dated milestones for learn-to-ship. Newest first. Each entry marks a real
 shipping step (skeleton → stub graph ranks → CI eval green → deployed → real
 corpus wired), per the build-in-public rule in CLAUDE.md.
 
+## 2026-07-08 — v1.4 shipped: rank reads the triaged vault queue
+
+First real-use morning produced QUESTIONS.md Q6: "my inbox is already
+triaged into [[Learning/Queue]] — read it." So the manual retype step dies:
+
+- `rank --queue` parses the vault queue page (`LTS_QUEUE_PAGE`, default
+  `Learning/Queue`, under the existing `LTS_VAULT_PATH`) into candidates:
+  task-marked bullets only (LATER/TODO/NOW/DOING), tags from #hashtags +
+  [[refs]] + `route::`, stable slug ids. Untasked bullets are page prose.
+- Read-only, like every vault touch: capture and triage stay human — the
+  spec's old "triage lands in v1.1" non-goal is now resolved as "triage
+  stays human permanently; the agent reads the result."
+- Verified on day one against the real vault and real corpus: the queue's
+  two items ranked with correct gap citations. 55 hermetic tests green.
+
 ## 2026-07-08 — v1.3 shipped: the docs get the artifact treatment
 
 QUESTIONS.md Q5: the user liked the artifact-styled doc pages — but GitHub

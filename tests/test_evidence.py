@@ -66,8 +66,9 @@ def test_cli_show_mode_prints_the_trail(capsys):
 
 
 def test_rank_cli_logs_a_rank_event(capsys):
-    cmd_rank(argparse.Namespace(candidates=DEFAULT_CANDIDATES, json=True))
+    cmd_rank(argparse.Namespace(candidates=DEFAULT_CANDIDATES, queue=False, json=True))
     (event,) = evidence.read_events()
     assert event["kind"] == "rank"
     assert event["candidates"] == 8
     assert len(event["top"]) == 3
+    assert event["source"].endswith("study-candidates.yaml")

@@ -44,8 +44,10 @@ study next).
 ## Non-Goals (frozen scope)
 
 - v0 does NOT do capture or `#inbox` triage — **`#inbox` capture is
-  Felix-owned**; the agent never writes attention-capture lines. Triage lands
-  in v1.1.
+  Felix-owned**; the agent never writes attention-capture lines. *Resolved in
+  v1.4 (QUESTIONS.md Q6):* triage stays human permanently — the human routes
+  `#inbox` onto the vault queue page; the agent only READS the already-triaged
+  result (`rank --queue`). No agent-side triage is planned anymore.
 - v0 does NOT do focus-guardian (keep-session-on-rails) — v2.
 - v1's recall loop is a card **checker**, not a generator: the human authors the
   cards; the agent only critiques (see Goals). The blog output stream stays out.
@@ -170,6 +172,15 @@ user-question log — demand signals live there; decisions land here).
   extraction), python-`markdown` server-side, mermaid.js client-side for the
   atlas diagrams, OpenAPI UI moved to `/api-docs`. One source of truth, three
   faces: GitHub Markdown, styled pages on the Space, the same locally.
+
+## Resolved during the v1.4 build (2026-07-08)
+
+- **Rank straight from the vault queue (QUESTIONS.md Q6).** The "Logseq-page
+  → list transform" flagged as a v1 concern is shipped: `rank --queue` parses
+  the human-triaged queue page (`LTS_QUEUE_PAGE`, default `Learning/Queue`,
+  under `LTS_VAULT_PATH`) into study candidates — task-marked bullets only,
+  tags from #hashtags + [[refs]] + `route::`. Read-only; capture and triage
+  remain human; `data/my-study.yaml` remains for ad-hoc lists.
 
 ## Open questions
 
