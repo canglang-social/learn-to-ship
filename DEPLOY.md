@@ -3,7 +3,8 @@
 The hosted agent ships as a small FastAPI container (`learn_to_ship/server.py` +
 `Dockerfile`) exposing the **rank** graph only:
 
-- `GET  /` — health check
+- `GET  /` — the demo front page (edit a study list → ranked in the browser)
+- `GET  /health` — health check
 - `POST /rank` — `{"candidates": [{id, title, tags}]}` → ranked list
 
 (The v1 **recall** card-checker is not hosted — it needs your Anthropic key and

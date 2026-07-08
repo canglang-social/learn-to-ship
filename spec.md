@@ -46,6 +46,9 @@ study next).
 - No web UI / DB in v0. The one service layer is a thin FastAPI wrapper
   (`server.py`) that exposes the rank graph for the hosted deploy — no business
   logic of its own; recall stays local (needs a key + writes nothing hosted).
+  *Amended in v1.1 (QUESTIONS.md Q4):* the wrapper now also serves ONE static
+  demo front page at `GET /` — no build toolchain, no auth, no persistence, no
+  DB; recall stays CLI/local. Anything beyond that single page remains out.
 
 ## Requirements / User stories
 
@@ -116,7 +119,26 @@ study next).
   paths resolve against the repo root). A private MCP server remains an option;
   the agent only needs `LTS_CORPUS_PATH` to point somewhere.
 
+## Resolved during the v1.1 build (2026-07-08)
+
+Both driven by dogfooding questions recorded in `QUESTIONS.md` (the
+user-question log — demand signals live there; decisions land here).
+
+- **Vault-aware recall (Q2).** The cards live in the Logseq vault, so recall
+  now resolves them itself: `LTS_VAULT_PATH` in `.env` names the vault root,
+  `--today` / `--journal DATE` map to `journals/yyyy_MM_dd.md`, and `--cards`
+  accepts a directory (scanned for `#card` blocks). Read-path only — capture
+  and authoring stay Felix-owned.
+- **Front page (Q4).** The non-goal "no web UI in v0" was scoped to v0;
+  amended above. `GET /` now serves one static, self-contained demo page over
+  the existing `POST /rank`; health moved to `GET /health`. Hosted, it demos
+  the fictional stub corpus; locally the same page ranks the private corpus.
+  Explicitly still out: DB, auth, a hosted recall UI.
+
 ## Open questions
 
 - Publish the case-study blog post (drafted in the `blog` repo) to close Goal 4.
 - Add usage-evidence capture (I run it daily; nothing records that yet).
+  QUESTIONS.md Q3 sharpened this: link study-item id → output shipped → cards
+  authored, so the loop closes into corpus updates — while the agent keeps
+  advising around the middle, never performing it.

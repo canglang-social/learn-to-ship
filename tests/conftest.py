@@ -14,3 +14,5 @@ import pytest
 @pytest.fixture(autouse=True)
 def _use_stub_corpus(monkeypatch):
     monkeypatch.delenv("LTS_CORPUS_PATH", raising=False)
+    # Same hermeticity for the vault: tests must not read a developer's real vault.
+    monkeypatch.delenv("LTS_VAULT_PATH", raising=False)

@@ -26,6 +26,11 @@ _CJK = re.compile(r"[　-〿㐀-鿿＀-￯]")  # common Han + CJK/fullwidth punc
 _PROPERTY = re.compile(r"^\s*\S[\w-]*:: ")
 
 
+def has_card(text: str) -> bool:
+    """True if the text contains at least one #card block."""
+    return bool(_CARD_TAG.search(text))
+
+
 def _indent(line: str) -> int:
     e = line.expandtabs(4)
     return len(e) - len(e.lstrip())
