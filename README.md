@@ -23,6 +23,9 @@ curl -s -X POST https://vegekiwi-learn-to-ship.hf.space/rank \
   -d '{"candidates":[{"id":"a","title":"Deploy to a cloud container","tags":["cloud","deploy"]}]}'
 ```
 
+**Docs:** [docs/USAGE.md](docs/USAGE.md) (daily use + the loop atlas) ·
+[docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) (architecture map + dev workflows)
+
 ## How it works
 
 Two thin graphs. **rank** (v0, the default) — *what should I study next?*
