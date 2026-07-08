@@ -62,6 +62,8 @@
   .score.zero { color: var(--muted); }
   #results .title { font-weight: 600; }
   #results .rationale { color: var(--muted); font-size: 0.9rem; margin-top: 0.15rem; }
+  #results .uncovered { border-style: dashed; display: block; }
+  #results .uncovered .title { color: var(--warn); font-size: 0.95rem; }
   .error { color: var(--warn); }
 
   footer {
@@ -143,7 +145,7 @@
         body: JSON.stringify({ candidates }),
       });
       if (!res.ok) throw new Error("rank failed: HTTP " + res.status);
-      const { ranked } = await res.json();
+      const { ranked, uncovered } = await res.json();
       ranked.forEach(r => {
         const li = document.createElement("li");
         const score = document.createElement("span");
@@ -160,6 +162,20 @@
         li.append(score, body);
         results.appendChild(li);
       });
+      if (uncovered && uncovered.length) {
+        const li = document.createElement("li");
+        li.className = "uncovered";
+        const head = document.createElement("div");
+        head.className = "title";
+        head.textContent = "Uncovered priority gaps — nothing in this list unblocks them:";
+        const rows = document.createElement("div");
+        rows.className = "rationale";
+        rows.textContent = uncovered
+          .map(g => `#${g.priority} ${g.competency} (asked in ~${Math.round(g.freq * 100)}% of JDs, you are '${g.level}')`)
+          .join(" · ");
+        li.append(head, rows);
+        results.appendChild(li);
+      }
     } catch (err) {
       results.innerHTML = '<li class="error">Could not rank: ' + err.message + "</li>";
     } finally {

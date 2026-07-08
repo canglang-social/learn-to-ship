@@ -22,6 +22,7 @@ of truth for scope.
 - Env: uv sync
 - Run (rank): uv run python -m learn_to_ship [rank --queue]
 - Run (recall): uv run python -m learn_to_ship recall --today | --journal <date> | --cards <file|dir>  [--material <file>]
+- Propose: uv run python -m learn_to_ship propose [--queue]   (drafts for uncovered gaps)
 - Evidence: uv run python -m learn_to_ship evidence [--item <id> --output <url>]
 - Serve: uv run langgraph dev   (or the FastAPI server — see DEPLOY.md)
 - Test: uv run pytest           (add -m live for the real-Claude card checks)

@@ -2,7 +2,8 @@
   "dependencies": ["."],
   "graphs": {
     "focus_director": "learn_to_ship.graph:graph",
-    "card_reviewer": "learn_to_ship.recall_graph:recall_graph"
+    "card_reviewer": "learn_to_ship.recall_graph:recall_graph",
+    "gap_proposer": "learn_to_ship.propose_graph:propose_graph"
   },
   "env": ".env",
   "image_distro": "wolfi"

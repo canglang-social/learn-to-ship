@@ -94,6 +94,16 @@ uv run python -m learn_to_ship --candidates data/study-candidates.yaml --json
 uv run python -m learn_to_ship rank --queue
 ```
 
+Every rank ends with the **inverse view**: uncovered priority gaps your list
+is silent about — rank can only order what you captured, so the silence is the
+most valuable signal. Ask for drafts to close them (Claude, needs
+`ANTHROPIC_API_KEY`; prints paste-ready queue bullets — nothing is ever
+written to your vault):
+
+```bash
+uv run python -m learn_to_ship propose --queue
+```
+
 Candidate list format (`data/study-candidates.yaml`) — a plain list; the agent
 picks up *after* you capture items, it does not capture for you:
 

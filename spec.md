@@ -182,6 +182,17 @@ user-question log — demand signals live there; decisions land here).
   tags from #hashtags + [[refs]] + `route::`. Read-only; capture and triage
   remain human; `data/my-study.yaml` remains for ad-hoc lists.
 
+## Resolved during the v1.5 build (2026-07-08)
+
+- **Gap-driven candidates (QUESTIONS.md Q7).** The queue holds only *known*
+  learning, so an uncovered gap was invisible to rank. Both stages shipped:
+  *coverage* — `ranker.uncovered()` lists priority gaps no candidate
+  unblocks, surfaced in every rank output (CLI, JSON, `/rank`, front page);
+  *proposals* — a third graph, `gap_proposer`, drafts 2–3 study items per
+  uncovered gap via an injectable Claude seam (`propose [--queue]`),
+  printed as paste-ready queue bullets. Boundary held: the agent proposes
+  in the terminal; the human triages onto the vault; nothing is written.
+
 ## Open questions
 
 - Hybrid matching fallback (QUESTIONS.md Q1): only if daily use shows the

@@ -13,7 +13,7 @@ from langgraph.graph import END, START, StateGraph
 
 from .mcp_client import fetch_gaps
 from .models import StudyItem
-from .ranker import rank
+from .ranker import rank, uncovered
 
 
 class FocusState(TypedDict, total=False):
@@ -26,6 +26,7 @@ class FocusState(TypedDict, total=False):
 
     candidates: Annotated[list, "candidate study items to rank"]
     ranked: Annotated[list[dict], "study items ranked by gap leverage"]
+    uncovered: Annotated[list[dict], "priority gaps no candidate unblocks"]
 
 
 def _as_study_item(c) -> StudyItem:
@@ -43,7 +44,21 @@ async def focus_director(state: FocusState) -> FocusState:
     gaps = await fetch_gaps()
     candidates = [_as_study_item(c) for c in state.get("candidates", [])]
     ranked = rank(candidates, gaps)
-    return {"ranked": [r.to_dict() for r in ranked]}
+    missing = uncovered(ranked, gaps)
+    return {
+        "ranked": [r.to_dict() for r in ranked],
+        # The inverse view (Q7): priority gaps this list is silent about.
+        "uncovered": [
+            {
+                "id": g.id,
+                "priority": g.priority,
+                "competency": g.competency,
+                "freq": g.freq,
+                "level": g.level,
+            }
+            for g in missing
+        ],
+    }
 
 
 def build_graph():

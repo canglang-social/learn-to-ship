@@ -26,7 +26,7 @@ from pydantic import BaseModel, Field
 
 from .graph import build_graph
 
-app = FastAPI(title="learn-to-ship — focus-director", version="1.4.0", docs_url="/api-docs")
+app = FastAPI(title="learn-to-ship — focus-director", version="1.5.0", docs_url="/api-docs")
 
 # Compile the graph once at startup and reuse across requests.
 _graph = build_graph()
@@ -162,4 +162,4 @@ async def rank(req: RankRequest) -> dict:
     """Rank a candidate study list by which JD gap each item unblocks."""
     candidates = [c.model_dump() for c in req.candidates]
     result = await _graph.ainvoke({"candidates": candidates})
-    return {"ranked": result["ranked"]}
+    return {"ranked": result["ranked"], "uncovered": result.get("uncovered", [])}

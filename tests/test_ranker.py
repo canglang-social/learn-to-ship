@@ -48,3 +48,25 @@ def test_deterministic_and_stable_across_runs():
     second = [r.item.id for r in rank(items, GAPS)]
     # Identical scores → original order preserved, repeatably.
     assert first == second == ["i0", "i1", "i2", "i3", "i4"]
+
+
+def test_uncovered_lists_priority_gaps_with_no_candidate():
+    from learn_to_ship.ranker import uncovered
+
+    # Only the cloud gap (priority 1) is covered; orchestration (priority 2)
+    # has no candidate; the two non-priority gaps never count as uncovered.
+    ranked = rank([StudyItem("a", "Deploy to cloud", ("cloud",))], GAPS)
+    missing = uncovered(ranked, GAPS)
+    assert [g.id for g in missing] == [1]
+    assert missing[0].priority == 2
+
+
+def test_uncovered_empty_when_the_ladder_is_covered():
+    from learn_to_ship.ranker import uncovered
+
+    items = [
+        StudyItem("a", "Deploy to cloud", ("cloud",)),
+        StudyItem("b", "Ship a langgraph agent", ("agent",)),
+    ]
+    ranked = rank(items, GAPS)
+    assert uncovered(ranked, GAPS) == []
