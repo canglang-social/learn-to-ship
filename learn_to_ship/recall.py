@@ -7,21 +7,17 @@ You author the cards; the checker only critiques them, mirroring v0's stance
 - correctness — is the answer accurate and consistent with the source material?
 
 Format problems (missing 中文, bad tags) are the deterministic linter's job
-(logseq.lint_format), not the LLM's. `get_checker()` returns the Claude checker
-by default; tests monkeypatch it with `StubCardChecker` so CI stays hermetic.
+(logseq.lint_format), not the LLM's. `get_checker()` returns the LLM checker
+when a key is configured (provider chosen in llm.py — DeepSeek or Anthropic);
+tests monkeypatch it with `StubCardChecker` so CI stays hermetic.
 """
 
 from __future__ import annotations
 
 from typing import Protocol
 
-import os
-
+from .llm import get_chat_model, has_llm_key
 from .models import Card, CardIssue
-
-# Sonnet 5: capable enough to judge atomicity + correctness, cheap enough to run
-# often. Note: it rejects a non-default `temperature` (400), so we don't set one.
-_MODEL = "claude-sonnet-5"
 
 _SYSTEM = """You review spaced-repetition flashcards that a learner wrote themselves.
 You do NOT rewrite, author, or reword cards — the learner phrases them on purpose,
@@ -52,18 +48,16 @@ class StubCardChecker:
         return list(self._issues)
 
 
-class ClaudeCardChecker:
-    """Content review via Claude (langchain-anthropic), structured output."""
+class LLMCardChecker:
+    """Content review via the configured LLM (llm.py), structured output."""
 
-    def __init__(self, model: str = _MODEL) -> None:
-        self._model = model
+    def __init__(self) -> None:
         self._runnable = None  # built lazily so importing needs no API key
 
     def _get_runnable(self):
         if self._runnable is None:
             from typing import Literal
 
-            from langchain_anthropic import ChatAnthropic
             from pydantic import BaseModel, Field
 
             class _Issue(BaseModel):
@@ -76,9 +70,7 @@ class ClaudeCardChecker:
             class _Result(BaseModel):
                 issues: list[_Issue] = Field(default_factory=list)
 
-            # No temperature — Sonnet 5 rejects a non-default value.
-            llm = ChatAnthropic(model=self._model)
-            self._runnable = llm.with_structured_output(_Result)
+            self._runnable = get_chat_model().with_structured_output(_Result)
         return self._runnable
 
     def check(self, card: Card, material: str | None) -> list[CardIssue]:
@@ -92,11 +84,7 @@ class ClaudeCardChecker:
         ]
 
 
-def has_api_key() -> bool:
-    return bool(os.environ.get("ANTHROPIC_API_KEY"))
-
-
 def get_checker() -> CardChecker:
-    """Factory — the Claude checker when a key is present, else a no-op so the
+    """Factory — the LLM checker when a key is configured, else a no-op so the
     deterministic format lint still runs. Tests monkeypatch this."""
-    return ClaudeCardChecker() if has_api_key() else StubCardChecker([])
+    return LLMCardChecker() if has_llm_key() else StubCardChecker([])

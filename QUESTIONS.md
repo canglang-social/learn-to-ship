@@ -26,6 +26,21 @@ Format per entry:
 
 <!-- Entries below, newest first. -->
 
+## Q8 · 2026-07-08 — Use DeepSeek first; maybe Anthropic later
+
+- **Asked:** Add an API change: I want to use DeepSeek first, to test. Maybe
+  we can change to the Anthropic API later.
+- **Underlying need:** Cost control while the LLM features (card checks,
+  gap proposals) are being tried daily — test cheap, upgrade deliberately.
+  The switch back must not require code changes.
+- **Answer given / shipped (v1.6):** the two LLM seams now build their model
+  through one module (`llm.py`): `LTS_LLM_PROVIDER = auto | deepseek |
+  anthropic` (auto prefers DeepSeek when `DEEPSEEK_API_KEY` is set, else
+  Anthropic), `LTS_LLM_MODEL` optionally overrides the per-provider default
+  (`deepseek-chat` / `claude-sonnet-5`). Switching later = one line in
+  `.env`. Hermetic CI unchanged — the stubs never call any provider.
+- **Status:** decided 2026-07-08 — user requested directly; shipped as v1.6.
+
 ## Q7 · 2026-07-08 — The queue is only my KNOWN learning; gaps should propose items
 
 - **Asked:** The inbox/queue is just my known learning. We have many gaps —

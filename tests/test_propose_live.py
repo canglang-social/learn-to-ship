@@ -5,16 +5,15 @@ Run explicitly with:  uv run pytest -m live
 
 from __future__ import annotations
 
-import os
-
 import pytest
 
 from learn_to_ship.models import Gap
-from learn_to_ship.propose import ClaudeGapProposer
+from learn_to_ship.llm import has_llm_key
+from learn_to_ship.propose import LLMGapProposer
 
 pytestmark = [
     pytest.mark.live,
-    pytest.mark.skipif(not os.environ.get("ANTHROPIC_API_KEY"), reason="no ANTHROPIC_API_KEY"),
+    pytest.mark.skipif(not has_llm_key(), reason="no LLM API key configured"),
 ]
 
 
@@ -28,7 +27,7 @@ def test_drafts_shippable_items_for_a_gap():
         leverage=0.8,
         keywords=("sql", "etl", "warehouse", "dbt"),
     )
-    drafts = ClaudeGapProposer().propose(gap, ["Ship a Flutter app to the stores"])
+    drafts = LLMGapProposer().propose(gap, ["Ship a Flutter app to the stores"])
     assert 2 <= len(drafts) <= 3
     for p in drafts:
         assert p.title and p.tags and p.route

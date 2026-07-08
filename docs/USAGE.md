@@ -74,8 +74,9 @@ LTS_CORPUS_PATH=../job_hunting/data/jd-gaps.real.yaml
 # Your Logseq vault root (the folder that contains journals/) — read-only.
 LTS_VAULT_PATH=/Users/you/path/to/vault
 
-# Only for recall's complexity + correctness checks (rank never uses it):
-ANTHROPIC_API_KEY=sk-ant-...
+# LLM for recall checks + propose drafts (rank never uses one). DeepSeek
+# first for cheap testing; LTS_LLM_PROVIDER=anthropic switches later (Q8):
+DEEPSEEK_API_KEY=sk-...   # or ANTHROPIC_API_KEY=sk-ant-...
 ```
 
 Everything still works without a `.env`: rank uses the committed demo corpus,
@@ -148,10 +149,12 @@ paste-ready queue bullets. You review, edit, and paste the keepers onto your
 queue page yourself — the vault is never written, so triage stays yours:
 
 ```bash
-uv run python -m learn_to_ship propose --queue    # needs ANTHROPIC_API_KEY
+uv run python -m learn_to_ship propose --queue    # needs an LLM key (see setup)
 ```
 
-Without a key it degrades to the coverage list (gaps, no drafts). Proposing
+Without a key it degrades to the coverage list (gaps, no drafts). The
+provider is chosen in `.env` — DeepSeek first for cheap testing,
+`LTS_LLM_PROVIDER=anthropic` to switch later. Proposing
 *directions* is allowed where card generation never is: phrasing a card is
 the studying, but advising what to study is the product's founding job.
 
@@ -180,8 +183,8 @@ uv run python -m learn_to_ship recall --today --material notes/langgraph.md
 | Check | Engine | Flags |
 | --- | --- | --- |
 | `format` | Deterministic lint — always runs, free | Missing EN or 中文 half, missing answer bullet, front not a question, missing topic tags, invalid `#q/*` |
-| `complexity` | Claude (needs key) — severity ⚠ | More than one atomic idea per card; says what to split out |
-| `correctness` | Claude (needs key) — severity ✗ | Answer wrong, or unsupported by `--material` when given (always pass the source when you have it) |
+| `complexity` | LLM (needs key) — severity ⚠ | More than one atomic idea per card; says what to split out |
+| `correctness` | LLM (needs key) — severity ✗ | Answer wrong, or unsupported by `--material` when given (always pass the source when you have it) |
 
 Local-only: recall needs your key, so the hosted deploy stays rank-only.
 

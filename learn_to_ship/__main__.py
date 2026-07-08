@@ -12,7 +12,8 @@
 `rank` (the default) runs the focus-director graph — ranks a study list by which
 JD gap each item unblocks, reading the corpus over MCP. `recall` runs the
 card-reviewer graph — you author flashcards, it checks them for complexity and
-correctness (needs ANTHROPIC_API_KEY; the deterministic format checks don't).
+correctness (needs an LLM key — DeepSeek or Anthropic, see llm.py; the
+deterministic format checks don't).
 `evidence` shows the local usage trail (rank runs, outputs shipped, recall
 sessions) and records outputs; corpus updates stay yours.
 """
@@ -36,7 +37,7 @@ from .recall_graph import build_recall_graph
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CANDIDATES = REPO_ROOT / "data" / "study-candidates.yaml"
 
-# Load a gitignored .env (LTS_CORPUS_PATH, ANTHROPIC_API_KEY) before the graphs
+# Load a gitignored .env (LTS_* settings, LLM API keys) before the graphs
 # run, so settings propagate to the MCP server subprocess and the LLM checker.
 load_dotenv(REPO_ROOT / ".env")
 
@@ -108,7 +109,7 @@ def _card_targets(args: argparse.Namespace) -> list[Path]:
 
 
 def cmd_recall(args: argparse.Namespace) -> None:
-    from .recall import has_api_key
+    from .llm import has_llm_key
 
     try:
         targets = _card_targets(args)
@@ -140,9 +141,10 @@ def cmd_recall(args: argparse.Namespace) -> None:
             print(json.dumps(grouped, indent=2, ensure_ascii=False))
         return
 
-    if not has_api_key():
+    if not has_llm_key():
         print(
-            "(no ANTHROPIC_API_KEY — format checks only; set a key for complexity + correctness)\n"
+            "(no LLM key — format checks only; set DEEPSEEK_API_KEY or "
+            "ANTHROPIC_API_KEY for complexity + correctness)\n"
         )
 
     if not any(r for _, r in results):
@@ -170,7 +172,7 @@ def _rank_candidates(args: argparse.Namespace) -> tuple[list[StudyItem], str]:
 
 
 def cmd_propose(args: argparse.Namespace) -> None:
-    from .recall import has_api_key
+    from .llm import has_llm_key
 
     try:
         candidates, source = _rank_candidates(args)
@@ -195,8 +197,11 @@ def cmd_propose(args: argparse.Namespace) -> None:
     if not blocks:
         print("No uncovered priority gaps — your list already addresses the whole ladder.")
         return
-    if not has_api_key():
-        print("(no ANTHROPIC_API_KEY — listing uncovered gaps only; set a key for drafts)\n")
+    if not has_llm_key():
+        print(
+            "(no LLM key — listing uncovered gaps only; set DEEPSEEK_API_KEY "
+            "or ANTHROPIC_API_KEY for drafts)\n"
+        )
     print(
         "Proposed study items per uncovered gap — review, edit, and paste the\n"
         "keepers onto your queue page yourself; nothing is written for you:\n"

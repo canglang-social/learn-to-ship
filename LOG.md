@@ -4,6 +4,16 @@ Dated milestones for learn-to-ship. Newest first. Each entry marks a real
 shipping step (skeleton → stub graph ranks → CI eval green → deployed → real
 corpus wired), per the build-in-public rule in CLAUDE.md.
 
+## 2026-07-08 — v1.6 shipped: DeepSeek first, Anthropic one line away
+
+QUESTIONS.md Q8: test the LLM features cheap, upgrade deliberately. The two
+LLM seams (card checker, gap proposer) now get their model from one module,
+`llm.py`: `LTS_LLM_PROVIDER = auto | deepseek | anthropic` — auto prefers
+DeepSeek when its key is set — plus `LTS_LLM_MODEL` for model overrides.
+Provider names live in exactly one file; the seams just ask for "the chat
+model". 69 hermetic tests green (8 new); live tests now skip on "no LLM key"
+rather than assuming Anthropic.
+
 ## 2026-07-08 — v1.5 shipped: the gaps talk back
 
 QUESTIONS.md Q7, asked minutes after v1.4 landed: "the queue is only my

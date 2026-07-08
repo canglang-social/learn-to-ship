@@ -96,9 +96,9 @@ uv run python -m learn_to_ship rank --queue
 
 Every rank ends with the **inverse view**: uncovered priority gaps your list
 is silent about — rank can only order what you captured, so the silence is the
-most valuable signal. Ask for drafts to close them (Claude, needs
-`ANTHROPIC_API_KEY`; prints paste-ready queue bullets — nothing is ever
-written to your vault):
+most valuable signal. Ask for drafts to close them (needs an LLM
+key — DeepSeek or Anthropic, see `.env.example`; prints paste-ready queue
+bullets — nothing is ever written to your vault):
 
 ```bash
 uv run python -m learn_to_ship propose --queue
@@ -123,7 +123,8 @@ second graph (`card-reviewer`) checks each one:
 
 - **format** (deterministic, no key) — bilingual EN+中文 present, tag order,
   valid `#q/why|how|apply`.
-- **complexity + correctness** (Claude) — is it one atomic idea? is the answer
+- **complexity + correctness** (the configured LLM — DeepSeek or Claude, see
+  `.env.example`) — is it one atomic idea? is the answer
   right / supported by your source? It flags problems; it never rewrites.
 
 ```bash
@@ -136,8 +137,8 @@ uv run python -m learn_to_ship recall --journal 2026-07-07
 uv run python -m learn_to_ship recall --cards path/to/cards.md
 uv run python -m learn_to_ship recall --cards path/to/vault/journals
 
-# Format checks alone need no key. With ANTHROPIC_API_KEY (in .env) you also
-# get complexity + correctness; --material grounds correctness in your source:
+# Format checks alone need no key. With an LLM key (in .env) you also get
+# complexity + correctness; --material grounds correctness in your source:
 uv run python -m learn_to_ship recall --today --material notes/langgraph.md
 ```
 
@@ -182,7 +183,7 @@ curl -X POST localhost:2024/runs/wait \
 
 ```bash
 uv run pytest            # hermetic: ranker, MCP round-trip, golden eval, card parse/lint
-uv run pytest -m live    # also runs the real-Claude card checks (needs ANTHROPIC_API_KEY)
+uv run pytest -m live    # also runs the real-LLM checks (needs a configured key)
 uv run ruff check .
 ```
 
