@@ -33,6 +33,11 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["learn_to_ship"]
 
+[tool.hatch.build.targets.wheel.force-include]
+# The served /docs pages render these files; a non-editable install (e.g. the
+# deploy container) has no repo root, so ship them inside the package too.
+"docs" = "learn_to_ship/_docs"
+
 [tool.ruff]
 line-length = 100
 target-version = "py311"

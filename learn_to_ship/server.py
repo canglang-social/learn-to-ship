@@ -32,7 +32,12 @@ app = FastAPI(title="learn-to-ship — focus-director", version="1.3.0", docs_ur
 _graph = build_graph()
 
 _STATIC = Path(__file__).parent / "static"
-_DOCS_DIR = Path(__file__).resolve().parent.parent / "docs"
+
+# Editable/source checkouts read the repo-root docs/; a non-editable install
+# (the deploy container) reads the copy shipped inside the wheel (_docs — see
+# pyproject force-include). Missing both is a packaging bug: fail loudly.
+_PKG = Path(__file__).resolve().parent
+_DOCS_DIR = next(d for d in (_PKG.parent / "docs", _PKG / "_docs") if d.is_dir())
 
 app.mount("/static", StaticFiles(directory=_STATIC), name="static")
 
