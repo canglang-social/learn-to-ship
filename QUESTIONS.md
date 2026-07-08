@@ -26,6 +26,28 @@ Format per entry:
 
 <!-- Entries below, newest first. -->
 
+## Q6 · 2026-07-08 — Read my triaged queue page directly
+
+- **Asked:** I need the tool to auto-read my inbox — actually it's already
+  triaged into the [[Learning/Queue]] page in my Logseq. Maybe an env var to
+  record the page, and an import/convert into the system.
+- **Underlying need:** Kill the manual transfer step. The human already
+  captures AND triages (routes A–C onto the queue page, Route D to
+  Incubation); retyping queue items into `data/my-study.yaml` is pure
+  friction the machine can absorb without touching either human step.
+- **Design note (parse reality, not an imagined format):** the real page has
+  an untasked header bullet, then items as `LATER`-marked bullets tagged
+  `#learn` with `route::` / `from::` / `note::` property lines. The parser
+  targets exactly that shape; untasked bullets are prose, not items.
+- **Answer given / shipped:** `rank --queue` reads the vault page named by
+  `LTS_QUEUE_PAGE` (default `Learning/Queue`, resolved via the existing
+  `LTS_VAULT_PATH`; Logseq's `/`→`___` filename encoding handled). Items
+  become StudyItems: stable slug ids, title with tags stripped, tags from
+  inline #hashtags + [[refs]] + the `route::` value. Read-only — no file is
+  ever written; `my-study.yaml` still works for ad-hoc lists. Verified live
+  against the real vault + real corpus on day one.
+- **Status:** decided 2026-07-08 — user requested directly; shipped as v1.4.
+
 ## Q5 · 2026-07-08 — Can the repo docs use the artifact's visual style?
 
 - **Asked:** I like the style of the docs artifacts (teal/paper HTML pages).

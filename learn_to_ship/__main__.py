@@ -2,6 +2,7 @@
 
     uv run python -m learn_to_ship                       # rank (default)
     uv run python -m learn_to_ship --candidates list.yaml --json
+    uv run python -m learn_to_ship rank --queue          # rank the vault queue page
     uv run python -m learn_to_ship recall --cards my.md [--material README.md]
     uv run python -m learn_to_ship recall --today        # today's vault journal
     uv run python -m learn_to_ship recall --journal 2026-07-07
@@ -55,9 +56,23 @@ async def _rank(candidates: list[StudyItem]):
 
 
 def cmd_rank(args: argparse.Namespace) -> None:
-    ranked = asyncio.run(_rank(load_candidates(args.candidates)))
+    if args.queue:
+        try:
+            page = vault.queue_page_path()
+            candidates = vault.parse_queue(page.read_text(encoding="utf-8"))
+            source = str(page)
+        except ValueError as e:
+            raise SystemExit(f"error: {e}") from e
+        if not candidates:
+            raise SystemExit(f"error: no task-marked queue items found in {page}")
+    else:
+        candidates = load_candidates(args.candidates)
+        source = str(args.candidates)
+    ranked = asyncio.run(_rank(candidates))
     # Usage evidence: the fact that you ranked (and what led) is part of the loop.
-    evidence.log_event("rank", candidates=len(ranked), top=[r["id"] for r in ranked[:3]])
+    evidence.log_event(
+        "rank", candidates=len(ranked), top=[r["id"] for r in ranked[:3]], source=source
+    )
     if args.json:
         print(json.dumps(ranked, indent=2, ensure_ascii=False))
         return
@@ -158,7 +173,13 @@ def main() -> None:
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     rank_p = sub.add_parser("rank", help="rank a study list by JD-gap leverage")
-    rank_p.add_argument("--candidates", type=Path, default=DEFAULT_CANDIDATES)
+    rank_src = rank_p.add_mutually_exclusive_group()
+    rank_src.add_argument("--candidates", type=Path, default=DEFAULT_CANDIDATES)
+    rank_src.add_argument(
+        "--queue",
+        action="store_true",
+        help="rank the triaged vault queue page (LTS_QUEUE_PAGE, needs LTS_VAULT_PATH)",
+    )
     rank_p.add_argument("--json", action="store_true")
     rank_p.set_defaults(func=cmd_rank)
 

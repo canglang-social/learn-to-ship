@@ -88,6 +88,10 @@ uv run python -m learn_to_ship
 
 # Rank your own list, as JSON
 uv run python -m learn_to_ship --candidates data/study-candidates.yaml --json
+
+# Rank your Logseq queue page directly — no retyping. You triage #inbox onto
+# the page (default [[Learning/Queue]], override LTS_QUEUE_PAGE); it only reads:
+uv run python -m learn_to_ship rank --queue
 ```
 
 Candidate list format (`data/study-candidates.yaml`) — a plain list; the agent

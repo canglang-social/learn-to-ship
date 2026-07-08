@@ -78,3 +78,50 @@ def test_card_files_directory_without_cards_is_loud(tmp_path):
 def test_card_files_missing_path_is_loud(tmp_path):
     with pytest.raises(ValueError, match="does not exist"):
         vault.card_files(tmp_path / "nope.md")
+
+
+# --- the triaged queue page (rank --queue) --------------------------------
+
+# Mirrors the real page shape: an untasked header bullet, then LATER-marked
+# items with route::/from:: property lines.
+QUEUE_TEXT = """\
+- Triaged learning topics waiting for a session — routes A–C only. Pull oldest first.
+- LATER How big labs evaluate model capability — benchmarks and model cards #learn
+  route:: C-material
+  from:: [[2026-07-05]] "i want to learn Claude"
+- LATER How to dev WITH Claude — API, tool use, agents #learn
+  route:: B-practice
+  note:: behind the one-topic lock ([[Learning/Incubation]] holds Route D)
+- someday maybe a bare bullet without a task marker
+"""
+
+
+def test_parse_queue_takes_only_task_marked_bullets():
+    items = vault.parse_queue(QUEUE_TEXT)
+    assert len(items) == 2
+    assert items[0].title.startswith("How big labs evaluate model capability")
+    assert "#learn" not in items[0].title
+
+
+def test_parse_queue_collects_tags_and_route():
+    first, second = vault.parse_queue(QUEUE_TEXT)
+    assert "learn" in first.tags and "c-material" in first.tags
+    assert "b-practice" in second.tags
+
+
+def test_parse_queue_ids_are_stable_slugs():
+    first, second = vault.parse_queue(QUEUE_TEXT)
+    assert first.id.startswith("how-big-labs-evaluate-model-capability")
+    assert second.id.startswith("how-to-dev-with-claude")
+    # Same input, same ids — determinism extends to the queue parser.
+    assert [i.id for i in vault.parse_queue(QUEUE_TEXT)] == [first.id, second.id]
+
+
+def test_queue_page_path_resolves_logseq_name_encoding(fake_vault, monkeypatch):
+    (fake_vault / "pages").mkdir()
+    page = fake_vault / "pages" / "Learning___Queue.md"
+    page.write_text(QUEUE_TEXT, encoding="utf-8")
+    assert vault.queue_page_path() == page  # default page name
+    monkeypatch.setenv(vault.QUEUE_PAGE_ENV, "My/Other Queue")
+    with pytest.raises(ValueError, match=r"\[\[My/Other Queue\]\] not found"):
+        vault.queue_page_path()

@@ -14,7 +14,7 @@ tool.
 ```mermaid
 flowchart TD
     corpus[("Private JD-gap corpus<br/>(LTS_CORPUS_PATH)")]
-    list["Candidate study list<br/>data/my-study.yaml"]
+    list["Triaged queue page — rank --queue<br/>(or data/my-study.yaml)"]
     rank["rank<br/>what should I study next?"]
     study["Study by SHIPPING an output<br/>(repo, deploy, post — the thesis)"]
     cards["Author bilingual #card blocks<br/>in the Logseq vault"]
@@ -22,7 +22,7 @@ flowchart TD
     trail[("Usage-evidence trail<br/>data/evidence.jsonl")]
     update["You update corpus levels<br/>(the agent only nudges)"]
 
-    capture["You capture ideas<br/>(Logseq #inbox — yours)"] --> list
+    capture["You capture + triage<br/>(#inbox → Learning/Queue — yours)"] --> list
     list --> rank
     corpus --> rank
     rank -->|"top pick + rationale"| study
@@ -42,9 +42,10 @@ flowchart TD
 ### The weekly rhythm, as a checklist
 
 1. **Capture** study ideas yourself in Logseq `#inbox` — the agent never does.
-2. **Transfer** real candidates into `data/my-study.yaml` (gitignored).
-3. **Rank**: `uv run python -m learn_to_ship` — study the top item; the
-   rationale says which gap it closes and why it's worth it. (Auto-logged.)
+2. **Triage** them yourself onto your queue page (`[[Learning/Queue]]`) as
+   task-marked bullets; ad-hoc lists can still go in `data/my-study.yaml`.
+3. **Rank**: `uv run python -m learn_to_ship rank --queue` — study the top
+   item; the rationale says which gap it closes and why. (Auto-logged.)
 4. **Ship an output** for it — that's the studying, per the project thesis.
 5. **Record it**: `evidence --item <id> --output <url>`.
 6. **Author cards** on what you learned, bilingual, in your vault.
@@ -81,8 +82,26 @@ path. That's the right mode for trying it out.
 
 ## rank — what should I study next?
 
-Keep a candidate list as plain YAML (`data/my-study.yaml`, gitignored). You
-capture; the agent picks up *after* capture:
+The daily path (v1.4): rank your **triaged vault queue page directly** — you
+capture and triage; the agent picks up after, read-only:
+
+```bash
+uv run python -m learn_to_ship rank --queue          # your [[Learning/Queue]] page
+uv run python -m learn_to_ship rank --queue --json
+```
+
+Queue items are task-marked bullets on the page named by `LTS_QUEUE_PAGE`
+(default `Learning/Queue`, under `LTS_VAULT_PATH`):
+
+```text
+- LATER How to dev WITH Claude — API, tool use, agents #learn
+  route:: B-practice
+```
+
+The `LATER/TODO/NOW/DOING` marker makes it an item (untasked bullets are
+prose); tags come from inline `#hashtags`, `[[refs]]`, and the `route::`
+value; ids are stable slugs of the title. Alternatively, keep an ad-hoc YAML
+list (`data/my-study.yaml`, gitignored):
 
 ```yaml
 candidates:
@@ -94,7 +113,6 @@ candidates:
 ```bash
 uv run python -m learn_to_ship                                  # example list
 uv run python -m learn_to_ship --candidates data/my-study.yaml  # your list
-uv run python -m learn_to_ship --candidates data/my-study.yaml --json
 ```
 
 Reading the output:
