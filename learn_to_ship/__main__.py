@@ -89,7 +89,9 @@ def cmd_rank(args: argparse.Namespace) -> None:
         print("Uncovered priority gaps — nothing in this list unblocks them:")
         for g in missing:
             pct = round(g["freq"] * 100)
-            print(f"  #{g['priority']} {g['competency']} (asked in ~{pct}% of JDs, you are '{g['level']}')")
+            print(
+                f"  #{g['priority']} {g['competency']} (asked in ~{pct}% of JDs, you are '{g['level']}')"
+            )
         print("  → capture study ideas for these, or run `propose` for drafts.")
 
 
@@ -156,6 +158,61 @@ def cmd_recall(args: argparse.Namespace) -> None:
             print()
 
 
+# --- propose ------------------------------------------------------------------
+
+
+def _rank_candidates(args: argparse.Namespace) -> tuple[list[StudyItem], str]:
+    """Resolve --queue / --candidates into study items (shared by rank/propose)."""
+    if args.queue:
+        page = vault.queue_page_path()
+        return vault.parse_queue(page.read_text(encoding="utf-8")), str(page)
+    return load_candidates(args.candidates), str(args.candidates)
+
+
+def cmd_propose(args: argparse.Namespace) -> None:
+    from .recall import has_api_key
+
+    try:
+        candidates, source = _rank_candidates(args)
+    except ValueError as e:
+        raise SystemExit(f"error: {e}") from e
+
+    from .propose_graph import build_propose_graph
+
+    result = asyncio.run(build_propose_graph().ainvoke({"candidates": candidates}))
+    blocks = result["proposals"]
+    evidence.log_event(
+        "propose",
+        gaps=len(blocks),
+        drafts=sum(len(b["proposals"]) for b in blocks),
+        source=source,
+    )
+
+    if args.json:
+        print(json.dumps(blocks, indent=2, ensure_ascii=False))
+        return
+
+    if not blocks:
+        print("No uncovered priority gaps — your list already addresses the whole ladder.")
+        return
+    if not has_api_key():
+        print("(no ANTHROPIC_API_KEY — listing uncovered gaps only; set a key for drafts)\n")
+    print(
+        "Proposed study items per uncovered gap — review, edit, and paste the\n"
+        "keepers onto your queue page yourself; nothing is written for you:\n"
+    )
+    for b in blocks:
+        pct = round(b["freq"] * 100)
+        print(f"Gap #{b['priority']} — {b['competency']} (~{pct}% of JDs, you are '{b['level']}')")
+        if not b["proposals"]:
+            print("  (no drafts)")
+        for p in b["proposals"]:
+            tags = " ".join(f"#{t}" for t in p["tags"])
+            print(f"  - LATER {p['title']} #learn {tags}")
+            print(f"    route:: {p['route']}")
+        print()
+
+
 # --- evidence -----------------------------------------------------------------
 
 
@@ -177,7 +234,7 @@ def cmd_evidence(args: argparse.Namespace) -> None:
 def main() -> None:
     argv = sys.argv[1:]
     # Back-compat: no subcommand (or leading flags) means `rank`.
-    if not argv or argv[0] not in {"rank", "recall", "evidence"}:
+    if not argv or argv[0] not in {"rank", "recall", "evidence", "propose"}:
         argv = ["rank", *argv]
 
     parser = argparse.ArgumentParser(prog="learn_to_ship", description=__doc__)
@@ -212,6 +269,19 @@ def main() -> None:
     )
     recall_p.add_argument("--json", action="store_true")
     recall_p.set_defaults(func=cmd_recall)
+
+    prop_p = sub.add_parser(
+        "propose", help="draft study items for uncovered priority gaps (needs a key)"
+    )
+    prop_src = prop_p.add_mutually_exclusive_group()
+    prop_src.add_argument("--candidates", type=Path, default=DEFAULT_CANDIDATES)
+    prop_src.add_argument(
+        "--queue",
+        action="store_true",
+        help="coverage against the triaged vault queue page (LTS_QUEUE_PAGE)",
+    )
+    prop_p.add_argument("--json", action="store_true")
+    prop_p.set_defaults(func=cmd_propose)
 
     ev_p = sub.add_parser(
         "evidence", help="see the usage trail, or record a shipped output for a study item"
