@@ -46,8 +46,11 @@ Format per entry:
   dependency, one route; live on the Space and locally; no duplicated
   content, no drift. Alternative considered: GitHub Pages (a second deploy
   surface to maintain — the Space already exists).
-- **Status:** open — needs a scope decision (extends the "one static page"
-  amendment in spec.md to "page + styled docs routes").
+- **Status:** decided 2026-07-08 — user approved ("merge and build");
+  shipped as `GET /docs/{usage,development}` rendering the canonical
+  `docs/*.md` with the shared theme (`static/theme.css`, extracted from the
+  front page — the second use that justified extraction) + client-side
+  mermaid. OpenAPI moved to `/api-docs`. Verified in a real browser.
 
 ## Q4 · 2026-07-08 — Everything is commands; a front page would be good
 

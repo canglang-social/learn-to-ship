@@ -1,0 +1,32 @@
+/* Design tokens shared by every page this app serves (front page + docs).
+   Light theme on :root; dark redefines tokens only — style components
+   through the variables, never inside the media query. */
+:root {
+  --bg: #F7F8F5;
+  --surface: #FFFFFF;
+  --ink: #22282A;
+  --muted: #5C6663;
+  --accent: #0E7A6C;
+  --accent-contrast: #FFFFFF;
+  --accent-soft: #0E7A6C1A;
+  --warn: #A15C07;
+  --line: #E1E5DF;
+  --code-bg: #EEF1EC;
+  --sans: "Avenir Next", Avenir, "Segoe UI", -apple-system, sans-serif;
+  --serif: Charter, "Bitstream Charter", Georgia, "Times New Roman", serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121716;
+    --surface: #1A201F;
+    --ink: #E4E9E6;
+    --muted: #93A09B;
+    --accent: #43C7AE;
+    --accent-contrast: #10201C;
+    --accent-soft: #43C7AE21;
+    --warn: #D99A45;
+    --line: #2A322F;
+    --code-bg: #1F2626;
+  }
+}

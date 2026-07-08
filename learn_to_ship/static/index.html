@@ -4,21 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>learn-to-ship — what should I study next?</title>
+<link rel="stylesheet" href="/static/theme.css">
 <style>
-  :root {
-    --bg: #F7F8F5; --surface: #FFFFFF; --ink: #22282A; --muted: #5C6663;
-    --accent: #0E7A6C; --accent-contrast: #FFFFFF; --line: #E1E5DF;
-    --code-bg: #EEF1EC; --warn: #A15C07;
-    --sans: "Avenir Next", Avenir, "Segoe UI", -apple-system, sans-serif;
-    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #121716; --surface: #1A201F; --ink: #E4E9E6; --muted: #93A09B;
-      --accent: #43C7AE; --accent-contrast: #10201C; --line: #2A322F;
-      --code-bg: #1F2626; --warn: #D99A45;
-    }
-  }
   * { box-sizing: border-box; }
   body {
     margin: 0; background: var(--bg); color: var(--ink);
@@ -104,6 +91,7 @@
   <ol id="results" aria-live="polite"></ol>
 
   <footer>Deterministic ranker · corpus read over MCP · checked by a CI golden eval ·
+  <a href="/docs/usage">usage guide</a> · <a href="/docs/development">dev guide</a> ·
   <a href="https://github.com/canglang-social/learn-to-ship">source on GitHub</a> ·
   API: <code>POST /rank</code></footer>
 </main>

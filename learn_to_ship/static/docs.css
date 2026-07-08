@@ -1,0 +1,46 @@
+/* Reading layout for the served docs pages (/docs/*) — the artifact style,
+   built on the shared tokens in theme.css. */
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--serif); font-size: 16.5px; line-height: 1.65;
+}
+main.doc { max-width: 46rem; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+h1, h2, h3 { font-family: var(--sans); font-weight: 600; line-height: 1.25; text-wrap: balance; }
+h1 { font-size: 1.9rem; margin: 0.5rem 0 0.75rem; }
+h2 { font-size: 1.3rem; margin: 3rem 0 0.75rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+h3 { font-size: 1.05rem; margin: 1.75rem 0 0.5rem; }
+p { margin: 0.75rem 0; }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+.eyebrow {
+  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--accent); margin: 0 0 0.25rem;
+}
+.eyebrow a { text-decoration: none; }
+code {
+  font-family: var(--mono); font-size: 0.85em;
+  background: var(--code-bg); border-radius: 3px; padding: 0.1em 0.35em;
+}
+pre {
+  background: var(--code-bg); border: 1px solid var(--line); border-radius: 6px;
+  padding: 0.9rem 1.1rem; overflow-x: auto; line-height: 1.5; margin: 1rem 0;
+}
+pre code { background: none; padding: 0; font-size: 0.82rem; }
+.mermaid { margin: 1.5rem 0; overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.92rem; display: block; overflow-x: auto; }
+th {
+  font-family: var(--sans); font-size: 0.78rem; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted); text-align: left;
+  padding: 0.5rem 0.9rem 0.5rem 0; border-bottom: 2px solid var(--line);
+}
+td { padding: 0.55rem 0.9rem 0.55rem 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+ul, ol { padding-left: 1.4rem; }
+li { margin: 0.4rem 0; }
+blockquote { border-left: 3px solid var(--accent); background: var(--accent-soft);
+  border-radius: 0 6px 6px 0; padding: 0.5rem 1.1rem; margin: 1.25rem 0; }
+hr { border: none; border-top: 1px solid var(--line); margin: 2.5rem 0; }
+footer.doc-footer {
+  margin-top: 4rem; padding-top: 1.25rem; border-top: 1px solid var(--line);
+  color: var(--muted); font-size: 0.85rem; font-family: var(--sans);
+}
