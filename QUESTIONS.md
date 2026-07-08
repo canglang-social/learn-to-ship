@@ -26,6 +26,30 @@ Format per entry:
 
 <!-- Entries below, newest first. -->
 
+## Q7 · 2026-07-08 — The queue is only my KNOWN learning; gaps should propose items
+
+- **Asked:** The inbox/queue is just my known learning. We have many gaps —
+  I need to learn against the real gaps, right? We should convert gaps into
+  the study list in the future.
+- **Underlying need:** rank is a *filter*: it can only order what the human
+  already captured. A gap with no queue item is invisible — rank never says
+  "your #1 gap has nothing addressing it." Live evidence from the first
+  real run (same day): the queue's top item unblocked gap **#2** — meaning
+  nothing in the queue touches gap #1, and the tool stayed silent about it.
+- **Design implication (hypothesis, two stages):**
+  1. *Coverage report (deterministic, no LLM):* run the matcher in reverse —
+     for each priority gap, does ANY queue item unblock it? Print uncovered
+     priority gaps after every rank ("uncovered: gap #1 …"). Pure signal
+     from existing machinery.
+  2. *Gap→proposal drafts (Claude, local-only, later):* for uncovered gaps,
+     draft 2–3 candidate study items (title + tags) as *suggestions* the
+     human triages onto the queue page themselves. Boundary: the agent
+     proposes text in the terminal; it never writes to the vault — choosing
+     and capturing stay human. (Unlike cards, proposing study *directions*
+     is the product's core job — advise at entry.)
+- **Status:** direction agreed 2026-07-08 ("in future"); parked as a spec.md
+  open question. Stage 1 is small and deterministic — build on request.
+
 ## Q6 · 2026-07-08 — Read my triaged queue page directly
 
 - **Asked:** I need the tool to auto-read my inbox — actually it's already
