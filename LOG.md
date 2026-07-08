@@ -4,6 +4,28 @@ Dated milestones for learn-to-ship. Newest first. Each entry marks a real
 shipping step (skeleton → stub graph ranks → CI eval green → deployed → real
 corpus wired), per the build-in-public rule in CLAUDE.md.
 
+## 2026-07-08 — v1.1 shipped: dogfooding questions become features
+
+The project ate its own thesis: a user-questions session (recorded in the new
+`QUESTIONS.md` — demand signals live there, decisions land in `spec.md`)
+produced four questions; two crossed into scope and shipped the same day.
+
+- **QUESTIONS.md** — a user-question log now drives product design. Per
+  question: what was asked, the underlying need, the design implication as a
+  hypothesis, and its status. Q1 (why keyword matching) stayed answered-only;
+  Q3 (what's the middle — the learning) sharpened the usage-evidence open
+  question; Q2 and Q4 became v1.1.
+- **Vault-aware recall (Q2).** `LTS_VAULT_PATH` + `recall --today` /
+  `--journal DATE` resolve the Logseq journal directly; `--cards` accepts a
+  directory. No more hand-typed vault paths. Read-path only — capture stays
+  human-owned. Verified against the real vault.
+- **Front page (Q4).** The hosted deploy now serves a demo page at `GET /`
+  (health → `/health`): edit a study list, see it ranked with rationales.
+  One static file, no build toolchain/DB/auth; the v0 non-goal was amended in
+  spec.md. Verified in a real browser against the rebuilt live Space.
+
+38 hermetic tests green (13 new). Live: <https://vegekiwi-learn-to-ship.hf.space>.
+
 ## 2026-07-07 — v1 hardening: self-audit + parser fixes
 
 Reviewed the recall checker and found three real parser bugs, all fixed with
