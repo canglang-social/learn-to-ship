@@ -22,7 +22,7 @@ from pydantic import BaseModel, Field
 
 from .graph import build_graph
 
-app = FastAPI(title="learn-to-ship — focus-director", version="0.1.0")
+app = FastAPI(title="learn-to-ship — focus-director", version="1.2.0")
 
 # Compile the graph once at startup and reuse across requests.
 _graph = build_graph()

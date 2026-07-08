@@ -5,11 +5,15 @@
     uv run python -m learn_to_ship recall --cards my.md [--material README.md]
     uv run python -m learn_to_ship recall --today        # today's vault journal
     uv run python -m learn_to_ship recall --journal 2026-07-07
+    uv run python -m learn_to_ship evidence              # the usage trail
+    uv run python -m learn_to_ship evidence --item k8s-deploy --output <url>
 
 `rank` (the default) runs the focus-director graph — ranks a study list by which
 JD gap each item unblocks, reading the corpus over MCP. `recall` runs the
 card-reviewer graph — you author flashcards, it checks them for complexity and
 correctness (needs ANTHROPIC_API_KEY; the deterministic format checks don't).
+`evidence` shows the local usage trail (rank runs, outputs shipped, recall
+sessions) and records outputs; corpus updates stay yours.
 """
 
 from __future__ import annotations
@@ -23,7 +27,7 @@ from pathlib import Path
 import yaml
 from dotenv import load_dotenv
 
-from . import vault
+from . import evidence, vault
 from .graph import build_graph
 from .models import StudyItem
 from .recall_graph import build_recall_graph
@@ -52,6 +56,8 @@ async def _rank(candidates: list[StudyItem]):
 
 def cmd_rank(args: argparse.Namespace) -> None:
     ranked = asyncio.run(_rank(load_candidates(args.candidates)))
+    # Usage evidence: the fact that you ranked (and what led) is part of the loop.
+    evidence.log_event("rank", candidates=len(ranked), top=[r["id"] for r in ranked[:3]])
     if args.json:
         print(json.dumps(ranked, indent=2, ensure_ascii=False))
         return
@@ -92,6 +98,10 @@ def cmd_recall(args: argparse.Namespace) -> None:
         )
         for f in targets
     ]
+    for f, reviews in results:
+        if reviews:
+            ok = sum(1 for r in reviews if r["verdict"] == "ok")
+            evidence.log_event("recall", source=str(f), cards=len(reviews), ok=ok)
 
     if args.json:
         # One file keeps the original flat shape; a directory groups by file.
@@ -120,13 +130,28 @@ def cmd_recall(args: argparse.Namespace) -> None:
             print()
 
 
+# --- evidence -----------------------------------------------------------------
+
+
+def cmd_evidence(args: argparse.Namespace) -> None:
+    if args.item or args.output:
+        if not (args.item and args.output):
+            raise SystemExit("error: recording an output needs both --item and --output")
+        extra = {"note": args.note} if args.note else {}
+        evidence.log_event("output", item=args.item, output=args.output, **extra)
+        print(f"Recorded: {args.item} → {args.output}")
+        return
+    print(f"Usage evidence ({evidence.evidence_path()}):\n")
+    print(evidence.summarize(evidence.read_events()))
+
+
 # --- entrypoint ---------------------------------------------------------------
 
 
 def main() -> None:
     argv = sys.argv[1:]
     # Back-compat: no subcommand (or leading flags) means `rank`.
-    if not argv or argv[0] not in {"rank", "recall"}:
+    if not argv or argv[0] not in {"rank", "recall", "evidence"}:
         argv = ["rank", *argv]
 
     parser = argparse.ArgumentParser(prog="learn_to_ship", description=__doc__)
@@ -155,6 +180,14 @@ def main() -> None:
     )
     recall_p.add_argument("--json", action="store_true")
     recall_p.set_defaults(func=cmd_recall)
+
+    ev_p = sub.add_parser(
+        "evidence", help="see the usage trail, or record a shipped output for a study item"
+    )
+    ev_p.add_argument("--item", help="study-item id that produced an output")
+    ev_p.add_argument("--output", help="the shipped output (URL or path)")
+    ev_p.add_argument("--note", help="optional one-line context")
+    ev_p.set_defaults(func=cmd_evidence)
 
     args = parser.parse_args(argv)
     args.func(args)

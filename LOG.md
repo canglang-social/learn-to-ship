@@ -4,6 +4,24 @@ Dated milestones for learn-to-ship. Newest first. Each entry marks a real
 shipping step (skeleton → stub graph ranks → CI eval green → deployed → real
 corpus wired), per the build-in-public rule in CLAUDE.md.
 
+## 2026-07-08 — v1.2 shipped: usage-evidence capture closes the loop
+
+QUESTIONS.md Q3 asked what sits between the corpus (input) and the cards
+(output). Answer: the learning — human-owned, and until now invisible to the
+system. v1.2 makes it visible without entering it:
+
+- `rank` and `recall` auto-log runs to a private, gitignored JSONL trail
+  (`data/evidence.jsonl`, `LTS_EVIDENCE_PATH` to override).
+- `evidence --item <id> --output <url>` records the output you shipped;
+  bare `evidence` shows the trail — rank runs, outputs per item, recall
+  sessions — ending in a nudge to update corpus levels. The update stays
+  human: the agent reports the middle, never performs it.
+- Housekeeping: Goal 4 was found already complete (the case-study post has
+  been live since 07-06 in en+zh — the spec note was stale); milestones now
+  get annotated git tags (`v1.1` tagged retroactively).
+
+46 hermetic tests green (8 new). Local-only; the hosted server never logs.
+
 ## 2026-07-08 — v1.1 shipped: dogfooding questions become features
 
 The project ate its own thesis: a user-questions session (recorded in the new

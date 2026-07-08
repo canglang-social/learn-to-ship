@@ -27,13 +27,19 @@ study next).
       corpus as MCP) — closes the "consumes-an-MCP-tool" JD gap authentically.
 - [x] **Cloud-deploy** the agent with a **GitHub Actions CI eval harness**
       (deployed free to Hugging Face Spaces; CI eval gates every push).
-- [~] Become portfolio case study #2 — repo public + blog post drafted; publish
-      the post to complete.
+- [x] Become portfolio case study #2 — repo public; the post is live in both
+      languages: <https://canglang.netlify.app/blog/2026-07-06-learning-to-ship/>
+      (verified 2026-07-08 — the "[~] publish to complete" note was stale).
 - [x] **v1: the recall loop, as a card *checker*.** You author the flashcards
       (phrasing them is the studying — never LLM-generated); a second LangGraph
       graph, `card-reviewer`, checks each card for **complexity** (atomicity) and
       **correctness** (via Claude), plus a deterministic Logseq-format lint.
       Local-only; hermetic CI (Claude behind an injectable stub).
+- [x] **v1.1: dogfooding features** (see Resolved below) — vault-aware recall +
+      the demo front page, both demanded via `QUESTIONS.md`.
+- [x] **v1.2: usage-evidence capture** (QUESTIONS.md Q3) — a private local
+      trail (rank runs → outputs shipped → recall sessions) that closes the
+      loop into corpus updates, which stay human-made.
 
 ## Non-Goals (frozen scope)
 
@@ -135,10 +141,24 @@ user-question log — demand signals live there; decisions land here).
   the fictional stub corpus; locally the same page ranks the private corpus.
   Explicitly still out: DB, auth, a hosted recall UI.
 
+## Resolved during the v1.2 build (2026-07-08)
+
+- **Usage-evidence capture (QUESTIONS.md Q3).** The middle of the loop was
+  invisible; now the CLI keeps a private, append-only JSONL trail
+  (`data/evidence.jsonl`, gitignored; override `LTS_EVIDENCE_PATH`): `rank`
+  and `recall` auto-log their runs, `evidence --item X --output <url>` records
+  a shipped output, and bare `evidence` shows the trail ending in a nudge to
+  update corpus levels — the update itself stays human (advise around the
+  middle, never perform it). Local-only: the hosted server never logs.
+- **Goal 4 was already complete.** The case-study post has been live since
+  2026-07-06 (en + zh); the spec's "publish to complete" note was stale.
+  Lesson recorded: check the live artifact before trusting a status note.
+- **Milestone convention hardened.** Each milestone now gets an annotated git
+  tag (`vX.Y`) on the merge commit, alongside the LOG.md entry (`v1.1` tagged
+  retroactively the same day).
+
 ## Open questions
 
-- Publish the case-study blog post (drafted in the `blog` repo) to close Goal 4.
-- Add usage-evidence capture (I run it daily; nothing records that yet).
-  QUESTIONS.md Q3 sharpened this: link study-item id → output shipped → cards
-  authored, so the loop closes into corpus updates — while the agent keeps
-  advising around the middle, never performing it.
+- Hybrid matching fallback (QUESTIONS.md Q1): only if daily use shows the
+  keyword matcher missing frequently — an LLM/embedding second pass for
+  unmatched items, outside the golden-eval path. Watching, not building.

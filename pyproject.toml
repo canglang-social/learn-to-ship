@@ -1,6 +1,6 @@
 [project]
 name = "learn-to-ship"
-version = "0.1.0"
+version = "1.2.0"
 description = "Output-driven learning agent: rank study items by which JD gap they unblock."
 requires-python = ">=3.11"
 dependencies = [
