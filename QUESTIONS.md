@@ -26,6 +26,32 @@ Format per entry:
 
 <!-- Entries below, newest first. -->
 
+## Q2 · 2026-07-08 — Where are my cards?
+
+- **Asked:** Where are my cards? I tried to run
+  `uv run python -m learn_to_ship recall --cards my-cards.md` (from the usage
+  guide) and there is no such file.
+- **Underlying need:** The user's cards live in their Logseq vault (journal
+  pages, per the capture convention); they expected the tool to know that.
+  `my-cards.md` in the docs was a placeholder, and nothing in the product
+  bridges "where cards actually live" to the `--cards` flag. First-run
+  friction: the happy-path command in the docs is not runnable as written.
+- **Answer given:** `--cards` takes any file containing Logseq `#card`
+  blocks; the real invocation is pointing it at a vault journal page
+  (quoted — the iCloud vault path contains spaces). Verified live against
+  the vault: it parsed the newest journal's card and flagged real format
+  issues. Docs examples should use a runnable real-shaped path.
+- **Design implication (hypothesis):** Make recall vault-aware, in line with
+  the spec note that a "Logseq-page → list transform is a v1 concern":
+  1. an `LTS_VAULT_PATH` (or `LTS_CARDS_PATH`) env default in `.env`, like
+     the corpus override;
+  2. a `--today` / `--journal [date]` flag resolving the vault's
+     `journals/yyyy_MM_dd.md` naming;
+  3. accept a directory (scan for `#card` blocks) instead of a single file.
+  Capture stays Felix-owned either way — this is read-path convenience only.
+- **Status:** answered — vault-aware defaults are the strongest product
+  signal so far; candidate for v1.1 scope discussion in spec.md.
+
 ## Q1 · 2026-07-08 — Why keyword matching instead of semantic retrieval?
 
 - **Asked:** Why match study items to gaps by keyword? From RAG retrieval,
