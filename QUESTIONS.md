@@ -26,7 +26,31 @@ Format per entry:
 
 <!-- Entries below, newest first. -->
 
-## Q3 · 2026-07-08 — What's the middle — the learning itself?
+## Q4 · 2026-07-08 — Everything is commands; a front page would be good
+
+- **Asked:** Right now everything is CLI commands, not a user interface. For
+  most users (including me), a front page would be good.
+- **Underlying need:** Lower the interaction cost. Even the project's own
+  author finds the command-line surface heavy for daily use (see Q2's
+  100-character quoted path); a stranger evaluating the portfolio can't
+  experience the agent at all without curl.
+- **Assessment given:** This is a scope change — spec.md's non-goals say
+  "No web UI / DB in v0" — but v0 is complete, so it is now legitimately
+  discussable. Two distinct users want a UI for different reasons:
+  (a) the portfolio visitor — a clickable hosted demo beats a curl snippet;
+  (b) Felix daily — but Q2's vault-aware CLI defaults might serve him
+  cheaper than a UI. Cheapest honest step: ONE static HTML page served by
+  the existing FastAPI app, calling the existing POST /rank, no DB, no
+  build toolchain, no framework — consistent with "no framework until a
+  second use demands it." Recall UI stays local-only (needs the user's key;
+  hosted deploy stays keyless by design).
+- **Design implication (hypothesis):** v1.x candidate: `GET /` serves a
+  minimal rank demo page (paste/edit candidates → ranked list with
+  rationales) on the hosted stub corpus; same page works locally against
+  the private corpus. Explicitly NOT: auth, DB, card-review UI on the
+  hosted deploy. Update spec.md non-goals if adopted.
+- **Status:** open — needs a scope decision in spec.md before any build;
+  leading candidate for the next milestone after vault-aware recall (Q2).
 
 - **Asked:** We have the corpus (input, which rank orders) and the cards
   (output, retrieval for learning). What is the middle — the learning?
