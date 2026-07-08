@@ -47,8 +47,12 @@ Format per entry:
      proposes text in the terminal; it never writes to the vault — choosing
      and capturing stay human. (Unlike cards, proposing study *directions*
      is the product's core job — advise at entry.)
-- **Status:** direction agreed 2026-07-08 ("in future"); parked as a spec.md
-  open question. Stage 1 is small and deterministic — build on request.
+- **Status:** decided 2026-07-08 — user approved both stages the same day;
+  shipped as v1.5. Stage 1: `uncovered` in every rank surface (CLI, JSON,
+  API, front page) — the first real run immediately exposed that gap #1 had
+  nothing in the queue. Stage 2: `propose [--queue]` (third graph,
+  gap_proposer) drafts paste-ready queue bullets via Claude; degrades to
+  coverage-only without a key; the vault is never written.
 
 ## Q6 · 2026-07-08 — Read my triaged queue page directly
 

@@ -45,7 +45,9 @@ flowchart TD
 2. **Triage** them yourself onto your queue page (`[[Learning/Queue]]`) as
    task-marked bullets; ad-hoc lists can still go in `data/my-study.yaml`.
 3. **Rank**: `uv run python -m learn_to_ship rank --queue` — study the top
-   item; the rationale says which gap it closes and why. (Auto-logged.)
+   item; the rationale says which gap it closes and why. Mind the footer:
+   uncovered gaps are queue blind spots — `propose --queue` drafts items for
+   them, which you triage back onto the page. (Auto-logged.)
 4. **Ship an output** for it — that's the studying, per the project thesis.
 5. **Record it**: `evidence --item <id> --output <url>`.
 6. **Author cards** on what you learned, bilingual, in your vault.
@@ -129,11 +131,29 @@ Reading the output:
   visible, never silent.
 - **Deterministic**: same input, same order, always. If the order moved, your
   data moved.
+- **The footer is the inverse view (v1.5)**: *uncovered priority gaps* — gaps
+  on your ladder that nothing in the list unblocks. rank can only order what
+  you captured, so this named silence is often the most valuable line.
 
 Corpus format: a `gaps:` list of `id, competency, freq (0–1), level
 (strong|solid|partial|gap|route_around|edge), priority (ladder slot or null),
 leverage (0–1, the sort key), keywords (lowercase)`. Copy from the commented
 demo `data/jd-gaps.stub.yaml`.
+
+## propose — drafts for the gaps you're not covering
+
+For each uncovered priority gap, Claude drafts 2–3 **output-driven** study
+items (build/deploy/write/measure — never "read about X"), printed as
+paste-ready queue bullets. You review, edit, and paste the keepers onto your
+queue page yourself — the vault is never written, so triage stays yours:
+
+```bash
+uv run python -m learn_to_ship propose --queue    # needs ANTHROPIC_API_KEY
+```
+
+Without a key it degrades to the coverage list (gaps, no drafts). Proposing
+*directions* is allowed where card generation never is: phrasing a card is
+the studying, but advising what to study is the product's founding job.
 
 ## recall — check the flashcards you wrote
 

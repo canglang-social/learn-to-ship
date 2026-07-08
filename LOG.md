@@ -4,6 +4,24 @@ Dated milestones for learn-to-ship. Newest first. Each entry marks a real
 shipping step (skeleton → stub graph ranks → CI eval green → deployed → real
 corpus wired), per the build-in-public rule in CLAUDE.md.
 
+## 2026-07-08 — v1.5 shipped: the gaps talk back
+
+QUESTIONS.md Q7, asked minutes after v1.4 landed: "the queue is only my
+*known* learning — the real gaps should propose the study list." Both stages
+shipped the same day:
+
+- **Coverage (deterministic).** `ranker.uncovered()` runs the matcher in
+  reverse; every rank output (CLI, JSON, `/rank`, front page) now ends with
+  the priority gaps nothing in the list unblocks. The first real run proved
+  the point instantly: gap #1 had zero queue items — a silence the tool used
+  to keep.
+- **Proposals (Claude, third graph).** `propose [--queue]` drafts 2–3
+  output-driven study items per uncovered gap (injectable seam, stub in CI,
+  key-gated live), printed as paste-ready queue bullets. The vault is never
+  written — the human triages the keepers on.
+
+61 hermetic tests green. Boundary intact: advise at entry, never decide.
+
 ## 2026-07-08 — v1.4 shipped: rank reads the triaged vault queue
 
 First real-use morning produced QUESTIONS.md Q6: "my inbox is already
