@@ -1,0 +1,134 @@
+# QUESTIONS.md — user-question log
+
+Questions Felix asks *as a user* of learn-to-ship, recorded verbatim-ish and
+then distilled, because they direct product design. When a question turns into
+a scope decision, the decision lands in `spec.md` (the source of truth) and
+this entry links to it — this file records the *demand signal*, not the spec.
+
+Rules for this file:
+
+- Capture the question as asked (refined for grammar), plus the underlying
+  need — what the user was actually trying to do when the question arose.
+- Note the design implication as a hypothesis, not a commitment.
+- Never record real career-corpus data here; this repo is public.
+
+Format per entry:
+
+```
+## Qn · YYYY-MM-DD — <short title>
+- **Asked:** <the question, refined>
+- **Underlying need:** <what the user was trying to do>
+- **Design implication (hypothesis):** <what this suggests we build/change>
+- **Status:** open | answered | folded into spec.md §…
+```
+
+---
+
+<!-- Entries below, newest first. -->
+
+## Q4 · 2026-07-08 — Everything is commands; a front page would be good
+
+- **Asked:** Right now everything is CLI commands, not a user interface. For
+  most users (including me), a front page would be good.
+- **Underlying need:** Lower the interaction cost. Even the project's own
+  author finds the command-line surface heavy for daily use (see Q2's
+  100-character quoted path); a stranger evaluating the portfolio can't
+  experience the agent at all without curl.
+- **Assessment given:** This is a scope change — spec.md's non-goals say
+  "No web UI / DB in v0" — but v0 is complete, so it is now legitimately
+  discussable. Two distinct users want a UI for different reasons:
+  (a) the portfolio visitor — a clickable hosted demo beats a curl snippet;
+  (b) Felix daily — but Q2's vault-aware CLI defaults might serve him
+  cheaper than a UI. Cheapest honest step: ONE static HTML page served by
+  the existing FastAPI app, calling the existing POST /rank, no DB, no
+  build toolchain, no framework — consistent with "no framework until a
+  second use demands it." Recall UI stays local-only (needs the user's key;
+  hosted deploy stays keyless by design).
+- **Design implication (hypothesis):** v1.x candidate: `GET /` serves a
+  minimal rank demo page (paste/edit candidates → ranked list with
+  rationales) on the hosted stub corpus; same page works locally against
+  the private corpus. Explicitly NOT: auth, DB, card-review UI on the
+  hosted deploy. Update spec.md non-goals if adopted.
+- **Status:** decided 2026-07-08 — user approved; shipped in PR #2 as one
+  static page at `GET /` (health → `/health`), verified in a real browser;
+  spec.md non-goal amended. Folded into spec.md "Resolved during v1.1".
+
+## Q3 · 2026-07-08 — What's the middle — the learning itself?
+
+- **Asked:** We have the corpus (input, which rank orders) and the cards
+  (output, retrieval for learning). What is the middle — the learning?
+- **Underlying need:** The user sees the system touches only the two ends of
+  the loop and wants to know whether the middle is missing by accident or by
+  design — i.e., what the product's actual boundary is.
+- **Answer given:** The middle is human-owned *by design* — it is the one
+  part that cannot be delegated without defeating the purpose, the same
+  logic as never LLM-generating cards. Concretely the middle today is:
+  ship an output for the top-ranked item (the output-driven thesis — this
+  repo itself is an instance, built to close the LangGraph/cloud-deploy
+  gaps) + Socratic study sessions (the agent-kit `learn` skill) + Logseq
+  capture. The agent touches the middle only at entry (rank rationale) and
+  exit (card check). v2's focus-guardian (keep-session-on-rails) is the
+  planned middle-adjacent feature, deliberately deferred.
+- **Design implication (hypothesis):** The middle is currently *invisible*
+  to the system — nothing records that a ranked item was studied, what
+  output shipped, or feeds evidence back into corpus levels. spec.md
+  already lists this open question ("usage-evidence capture"). Hypothesis:
+  a lightweight session-evidence link (study-item id → output link → cards
+  authored) that closes the loop rank → learn → recall → corpus update,
+  WITHOUT the agent directing the learning itself. Boundary to hold: the
+  agent observes and advises around the middle; it never performs it.
+- **Status:** answered — pairs with spec.md's open question; candidate to
+  become the v1.1/v2 organizing theme (close the loop, don't enter the middle).
+
+## Q2 · 2026-07-08 — Where are my cards?
+
+- **Asked:** Where are my cards? I tried to run
+  `uv run python -m learn_to_ship recall --cards my-cards.md` (from the usage
+  guide) and there is no such file.
+- **Underlying need:** The user's cards live in their Logseq vault (journal
+  pages, per the capture convention); they expected the tool to know that.
+  `my-cards.md` in the docs was a placeholder, and nothing in the product
+  bridges "where cards actually live" to the `--cards` flag. First-run
+  friction: the happy-path command in the docs is not runnable as written.
+- **Answer given:** `--cards` takes any file containing Logseq `#card`
+  blocks; the real invocation is pointing it at a vault journal page
+  (quoted — the iCloud vault path contains spaces). Verified live against
+  the vault: it parsed the newest journal's card and flagged real format
+  issues. Docs examples should use a runnable real-shaped path.
+- **Design implication (hypothesis):** Make recall vault-aware, in line with
+  the spec note that a "Logseq-page → list transform is a v1 concern":
+  1. an `LTS_VAULT_PATH` (or `LTS_CARDS_PATH`) env default in `.env`, like
+     the corpus override;
+  2. a `--today` / `--journal [date]` flag resolving the vault's
+     `journals/yyyy_MM_dd.md` naming;
+  3. accept a directory (scan for `#card` blocks) instead of a single file.
+  Capture stays Felix-owned either way — this is read-path convenience only.
+- **Status:** decided 2026-07-08 — user approved; shipped in PR #2
+  (`LTS_VAULT_PATH`, `--today`, `--journal DATE`, directory `--cards`),
+  verified against the real vault. Folded into spec.md "Resolved during v1.1".
+
+## Q1 · 2026-07-08 — Why keyword matching instead of semantic retrieval?
+
+- **Asked:** Why match study items to gaps by keyword? From RAG retrieval,
+  keyword matching is considered the weak approach (vs. embeddings), right?
+- **Underlying need:** Trust the ranking — the user knows lexical matching has
+  a vocabulary-mismatch problem ("k8s" ≠ "kubernetes") and wants to know
+  whether the ranker silently misses matches the way sparse retrieval does.
+- **Answer given:** This is not retrieval at scale — it is a ~10×8 matching
+  problem over a corpus the user authors, where determinism is load-bearing:
+  the golden eval pins the exact order, CI runs hermetic (no key, no network),
+  and every match is explainable ("this tag hit this keyword"). Embeddings
+  would buy recall the corpus doesn't need yet, at the cost of the eval,
+  reproducibility, and a model dependency in the rank path. The RAG lesson
+  applies when recall over large, heterogeneous, un-ownable text matters;
+  here the fix for a miss is editing one YAML line you own. The vocabulary-
+  mismatch risk is real and acknowledged: today it is mitigated by curating
+  `keywords` per gap; the miss mode is visible (score 0.00, "No JD gap
+  matched"), never silent.
+- **Design implication (hypothesis):** If misses become frequent in daily
+  use, add a *hybrid* second pass — deterministic keyword match first, then an
+  optional LLM/embedding fallback ONLY for items that matched nothing, clearly
+  labeled and kept out of the golden eval path. Also consider a `--explain`
+  flag showing which keyword hit. Do not replace the deterministic core.
+- **Status:** answered — watching daily use for miss frequency before any
+  hybrid work.
