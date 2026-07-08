@@ -25,7 +25,7 @@ of truth for scope.
 - Propose: uv run python -m learn_to_ship propose [--queue]   (drafts for uncovered gaps)
 - Evidence: uv run python -m learn_to_ship evidence [--item <id> --output <url>]
 - Serve: uv run langgraph dev   (or the FastAPI server — see DEPLOY.md)
-- Test: uv run pytest           (add -m live for the real-Claude card checks)
+- Test: uv run pytest           (add -m live for the real-LLM checks; needs a key)
 - Lint: uv run ruff check . && uv run ruff format .
 
 ## Conventions

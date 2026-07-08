@@ -67,11 +67,12 @@ def test_cli_prints_paste_ready_queue_bullets(stub_proposer, tmp_path, capsys):
 def test_cli_no_key_still_reports_uncovered(monkeypatch, tmp_path, capsys):
     # Default proposer with no key = empty stub → coverage prints, no drafts.
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.delenv("DEEPSEEK_API_KEY", raising=False)
     lst = tmp_path / "one.yaml"
     lst.write_text(
         yaml.safe_dump({"candidates": [{"id": "a", "title": "Flutter app", "tags": ["flutter"]}]})
     )
     cmd_propose(argparse.Namespace(candidates=lst, queue=False, json=False))
     out = capsys.readouterr().out
-    assert "no ANTHROPIC_API_KEY" in out
+    assert "no LLM key" in out
     assert "Gap #2" in out and "(no drafts)" in out

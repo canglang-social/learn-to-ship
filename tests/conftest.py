@@ -17,6 +17,10 @@ def _use_stub_corpus(monkeypatch, tmp_path):
     # Same hermeticity for the vault: tests must not read a developer's real vault.
     monkeypatch.delenv("LTS_VAULT_PATH", raising=False)
     monkeypatch.delenv("LTS_QUEUE_PAGE", raising=False)
+    # LLM provider selection stays predictable (auto) regardless of the
+    # developer's shell; API keys are NOT deleted — live tests need them.
+    monkeypatch.delenv("LTS_LLM_PROVIDER", raising=False)
+    monkeypatch.delenv("LTS_LLM_MODEL", raising=False)
     # And for evidence: CLI commands under test log usage — send it to a
     # throwaway file so tests never append to the developer's real trail.
     monkeypatch.setenv("LTS_EVIDENCE_PATH", str(tmp_path / "evidence.jsonl"))

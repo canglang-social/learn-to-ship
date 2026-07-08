@@ -193,6 +193,14 @@ user-question log — demand signals live there; decisions land here).
   printed as paste-ready queue bullets. Boundary held: the agent proposes
   in the terminal; the human triages onto the vault; nothing is written.
 
+## Resolved during the v1.6 build (2026-07-08)
+
+- **LLM provider switch (QUESTIONS.md Q8).** Both LLM seams (card checker,
+  gap proposer) now build their model through `llm.py`: `LTS_LLM_PROVIDER =
+  auto | deepseek | anthropic` (auto prefers DeepSeek — test cheap first),
+  `LTS_LLM_MODEL` overrides the per-provider default. Switching back to
+  Anthropic later is one `.env` line. CI unchanged — stubs never call out.
+
 ## Open questions
 
 - Hybrid matching fallback (QUESTIONS.md Q1): only if daily use shows the
