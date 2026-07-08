@@ -26,7 +26,32 @@ Format per entry:
 
 <!-- Entries below, newest first. -->
 
-## Q2 · 2026-07-08 — Where are my cards?
+## Q3 · 2026-07-08 — What's the middle — the learning itself?
+
+- **Asked:** We have the corpus (input, which rank orders) and the cards
+  (output, retrieval for learning). What is the middle — the learning?
+- **Underlying need:** The user sees the system touches only the two ends of
+  the loop and wants to know whether the middle is missing by accident or by
+  design — i.e., what the product's actual boundary is.
+- **Answer given:** The middle is human-owned *by design* — it is the one
+  part that cannot be delegated without defeating the purpose, the same
+  logic as never LLM-generating cards. Concretely the middle today is:
+  ship an output for the top-ranked item (the output-driven thesis — this
+  repo itself is an instance, built to close the LangGraph/cloud-deploy
+  gaps) + Socratic study sessions (the agent-kit `learn` skill) + Logseq
+  capture. The agent touches the middle only at entry (rank rationale) and
+  exit (card check). v2's focus-guardian (keep-session-on-rails) is the
+  planned middle-adjacent feature, deliberately deferred.
+- **Design implication (hypothesis):** The middle is currently *invisible*
+  to the system — nothing records that a ranked item was studied, what
+  output shipped, or feeds evidence back into corpus levels. spec.md
+  already lists this open question ("usage-evidence capture"). Hypothesis:
+  a lightweight session-evidence link (study-item id → output link → cards
+  authored) that closes the loop rank → learn → recall → corpus update,
+  WITHOUT the agent directing the learning itself. Boundary to hold: the
+  agent observes and advises around the middle; it never performs it.
+- **Status:** answered — pairs with spec.md's open question; candidate to
+  become the v1.1/v2 organizing theme (close the loop, don't enter the middle).
 
 - **Asked:** Where are my cards? I tried to run
   `uv run python -m learn_to_ship recall --cards my-cards.md` (from the usage
