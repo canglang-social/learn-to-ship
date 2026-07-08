@@ -187,3 +187,9 @@ user-question log — demand signals live there; decisions land here).
 - Hybrid matching fallback (QUESTIONS.md Q1): only if daily use shows the
   keyword matcher missing frequently — an LLM/embedding second pass for
   unmatched items, outside the golden-eval path. Watching, not building.
+- Gap-driven candidates (QUESTIONS.md Q7): the queue holds only *known*
+  learning, so an uncovered gap is invisible to rank. Direction agreed:
+  stage 1 — a deterministic coverage report (which priority gaps have no
+  queue item); stage 2 — optional Claude-drafted study-item *proposals* for
+  uncovered gaps, which the human triages onto the queue themselves. The
+  agent proposes in the terminal only; it never writes to the vault.
