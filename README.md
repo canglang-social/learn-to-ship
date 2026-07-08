@@ -129,6 +129,22 @@ Local-only (needs your key; the hosted deploy stays rank-only). Cards look like:
 	- Leverage folds frequency × distance-from-level. Leverage 综合频率×水平差距。
 ```
 
+## Usage evidence (v1.2) — the loop, made visible
+
+`rank` and `recall` runs auto-log to a **private, gitignored** JSONL trail
+(`data/evidence.jsonl`; override with `LTS_EVIDENCE_PATH`). Record an output
+you shipped, and the trail links the whole loop — rank → output → recall —
+ending in a nudge to update your corpus levels (that update stays yours):
+
+```bash
+uv run python -m learn_to_ship evidence --item k8s-deploy \
+  --output https://github.com/you/thing --note "deployed with health check"
+
+uv run python -m learn_to_ship evidence      # show the trail
+```
+
+Local-only: the hosted server never writes evidence.
+
 ## Serve it (deployed endpoint)
 
 ```bash

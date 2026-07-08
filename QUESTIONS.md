@@ -77,8 +77,10 @@ Format per entry:
   authored) that closes the loop rank → learn → recall → corpus update,
   WITHOUT the agent directing the learning itself. Boundary to hold: the
   agent observes and advises around the middle; it never performs it.
-- **Status:** answered — pairs with spec.md's open question; candidate to
-  become the v1.1/v2 organizing theme (close the loop, don't enter the middle).
+- **Status:** decided 2026-07-08 — user approved as v1.2; shipped as
+  usage-evidence capture (`evidence` subcommand + auto-logged rank/recall
+  trail, private JSONL). Folded into spec.md "Resolved during v1.2". The
+  boundary held: the agent reports the trail; corpus updates stay human.
 
 ## Q2 · 2026-07-08 — Where are my cards?
 

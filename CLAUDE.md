@@ -22,6 +22,7 @@ of truth for scope.
 - Env: uv sync
 - Run (rank): uv run python -m learn_to_ship
 - Run (recall): uv run python -m learn_to_ship recall --today | --journal <date> | --cards <file|dir>  [--material <file>]
+- Evidence: uv run python -m learn_to_ship evidence [--item <id> --output <url>]
 - Serve: uv run langgraph dev   (or the FastAPI server — see DEPLOY.md)
 - Test: uv run pytest           (add -m live for the real-Claude card checks)
 - Lint: uv run ruff check . && uv run ruff format .
@@ -43,8 +44,9 @@ builds a dated, public trail of actually shipping an agent end to end.
   local/private MCP. Bake this split in from commit one — never commit real
   JD-gap / career data.
 - Publish at milestones, not on a clock: skeleton runs → stub graph ranks →
-  CI eval green → deployed → real MCP wired. Each is one `LOG.md` entry and
-  optionally one post to the `blog` project.
+  CI eval green → deployed → real MCP wired. Each is one `LOG.md` entry, an
+  annotated git tag (`vX.Y`) on the merge commit, and optionally one post to
+  the `blog` project.
 - README is written for a stranger (what / why / status), not for me.
 
 ## Do / Do-NOT
