@@ -26,6 +26,29 @@ Format per entry:
 
 <!-- Entries below, newest first. -->
 
+## Q5 · 2026-07-08 — Can the repo docs use the artifact's visual style?
+
+- **Asked:** I like the style of the docs artifacts (teal/paper HTML pages).
+  Can we just use that style in this repo?
+- **Underlying need:** Reading experience. The rendered artifact pages read
+  better than raw GitHub Markdown; the user wants that quality for the
+  canonical in-repo docs, not just for one-off snapshots.
+- **Constraint that shapes the answer:** GitHub does NOT render committed
+  HTML — a checked-in artifact file shows as source code on github.com. So
+  "the artifact style in the repo" needs a serving surface. The style is
+  already partially in-repo: the front page (v1.1) deliberately reuses the
+  same design system (palette, type, tokens).
+- **Design implication (hypothesis):** Keep `docs/*.md` the single source of
+  truth (GitHub still renders it, diffs stay reviewable), and let the
+  existing FastAPI app render those same files as styled pages at
+  `GET /docs/usage` and `GET /docs/development` — artifact stylesheet shared
+  with the front page, mermaid.js for the diagrams. One small markdown
+  dependency, one route; live on the Space and locally; no duplicated
+  content, no drift. Alternative considered: GitHub Pages (a second deploy
+  surface to maintain — the Space already exists).
+- **Status:** open — needs a scope decision (extends the "one static page"
+  amendment in spec.md to "page + styled docs routes").
+
 ## Q4 · 2026-07-08 — Everything is commands; a front page would be good
 
 - **Asked:** Right now everything is CLI commands, not a user interface. For
