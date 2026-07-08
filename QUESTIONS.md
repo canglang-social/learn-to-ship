@@ -49,8 +49,11 @@ Format per entry:
   rationales) on the hosted stub corpus; same page works locally against
   the private corpus. Explicitly NOT: auth, DB, card-review UI on the
   hosted deploy. Update spec.md non-goals if adopted.
-- **Status:** open — needs a scope decision in spec.md before any build;
-  leading candidate for the next milestone after vault-aware recall (Q2).
+- **Status:** decided 2026-07-08 — user approved; shipped in PR #2 as one
+  static page at `GET /` (health → `/health`), verified in a real browser;
+  spec.md non-goal amended. Folded into spec.md "Resolved during v1.1".
+
+## Q3 · 2026-07-08 — What's the middle — the learning itself?
 
 - **Asked:** We have the corpus (input, which rank orders) and the cards
   (output, retrieval for learning). What is the middle — the learning?
@@ -98,8 +101,9 @@ Format per entry:
      `journals/yyyy_MM_dd.md` naming;
   3. accept a directory (scan for `#card` blocks) instead of a single file.
   Capture stays Felix-owned either way — this is read-path convenience only.
-- **Status:** answered — vault-aware defaults are the strongest product
-  signal so far; candidate for v1.1 scope discussion in spec.md.
+- **Status:** decided 2026-07-08 — user approved; shipped in PR #2
+  (`LTS_VAULT_PATH`, `--today`, `--journal DATE`, directory `--cards`),
+  verified against the real vault. Folded into spec.md "Resolved during v1.1".
 
 ## Q1 · 2026-07-08 — Why keyword matching instead of semantic retrieval?
 
