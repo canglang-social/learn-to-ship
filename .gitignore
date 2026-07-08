@@ -19,3 +19,5 @@ data/jd-gaps.yaml
 data/jd-gaps.real.yaml
 # Private, personal study lists (real daily-use inputs).
 data/my-*.yaml
+# Private usage-evidence trail (rank runs, shipped outputs, recall sessions).
+data/evidence.jsonl
