@@ -13,7 +13,9 @@ ships with a GitHub Actions eval harness and a live cloud deploy, so it doubles 
 a portfolio artifact for the exact gaps it reasons about (a shipped agent on a
 named framework; a cloud-deployed, CI/eval-tracked build).
 
-**Live:** <https://vegekiwi-learn-to-ship.hf.space> (serves the public demo corpus)
+**Live:** <https://vegekiwi-learn-to-ship.hf.space> — open it in a browser for
+the clickable demo (edit a study list → ranked, on the public demo corpus), or
+hit the API directly:
 
 ```bash
 curl -s -X POST https://vegekiwi-learn-to-ship.hf.space/rank \

@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>learn-to-ship — what should I study next?</title>
+<style>
+  :root {
+    --bg: #F7F8F5; --surface: #FFFFFF; --ink: #22282A; --muted: #5C6663;
+    --accent: #0E7A6C; --accent-contrast: #FFFFFF; --line: #E1E5DF;
+    --code-bg: #EEF1EC; --warn: #A15C07;
+    --sans: "Avenir Next", Avenir, "Segoe UI", -apple-system, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #121716; --surface: #1A201F; --ink: #E4E9E6; --muted: #93A09B;
+      --accent: #43C7AE; --accent-contrast: #10201C; --line: #2A322F;
+      --code-bg: #1F2626; --warn: #D99A45;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--sans); font-size: 16px; line-height: 1.55;
+  }
+  main { max-width: 44rem; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 0.5rem;
+  }
+  h1 { font-size: 1.7rem; line-height: 1.25; margin: 0 0 0.5rem; text-wrap: balance; }
+  .lede { color: var(--muted); margin: 0 0 2rem; }
+  .lede a { color: var(--accent); }
+
+  .item { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
+  .item input {
+    font: inherit; color: var(--ink); background: var(--surface);
+    border: 1px solid var(--line); border-radius: 6px; padding: 0.5rem 0.7rem;
+  }
+  .item input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .item .title { flex: 3 1 12rem; min-width: 0; }
+  .item .tags { flex: 2 1 8rem; min-width: 0; font-family: var(--mono); font-size: 0.85rem; }
+  .item .remove {
+    background: none; border: 1px solid var(--line); border-radius: 6px;
+    color: var(--muted); cursor: pointer; padding: 0 0.6rem; font-size: 1rem;
+  }
+  .item .remove:hover, .item .remove:focus-visible { color: var(--warn); border-color: var(--warn); }
+
+  .actions { display: flex; gap: 0.75rem; margin: 1rem 0 2.5rem; }
+  button { font: inherit; cursor: pointer; }
+  .add {
+    background: none; border: 1px dashed var(--line); border-radius: 6px;
+    color: var(--muted); padding: 0.5rem 1rem;
+  }
+  .add:hover, .add:focus-visible { color: var(--accent); border-color: var(--accent); }
+  .rank {
+    background: var(--accent); color: var(--accent-contrast); border: none;
+    border-radius: 6px; padding: 0.5rem 1.4rem; font-weight: 600;
+  }
+  .rank:hover { filter: brightness(1.08); }
+  .rank:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .rank[disabled] { opacity: 0.6; cursor: wait; }
+
+  #results { list-style: none; margin: 0; padding: 0; }
+  #results li {
+    display: flex; gap: 0.9rem; align-items: baseline;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+    padding: 0.8rem 1rem; margin-bottom: 0.6rem;
+  }
+  .score {
+    font-family: var(--mono); font-variant-numeric: tabular-nums;
+    color: var(--accent); font-weight: 600; white-space: nowrap;
+  }
+  .score.zero { color: var(--muted); }
+  #results .title { font-weight: 600; }
+  #results .rationale { color: var(--muted); font-size: 0.9rem; margin-top: 0.15rem; }
+  .error { color: var(--warn); }
+
+  footer {
+    margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 0.85rem;
+  }
+  footer a { color: var(--accent); }
+  footer code { font-family: var(--mono); background: var(--code-bg); border-radius: 3px; padding: 0.1em 0.35em; }
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">learn-to-ship · focus-director · live demo</p>
+  <h1>What should I study next?</h1>
+  <p class="lede">Edit the study list, then rank it. Each item is matched against a
+  job-description gap corpus and sorted by how much closing that gap is worth —
+  deterministically, with a reason per item. This demo ranks against a
+  <a href="https://github.com/canglang-social/learn-to-ship/blob/main/data/jd-gaps.stub.yaml">fictional
+  sample corpus</a>; run it locally to use your own.</p>
+
+  <div id="items"></div>
+  <div class="actions">
+    <button type="button" class="add" id="add">+ Add item</button>
+    <button type="button" class="rank" id="rank">Rank my list</button>
+  </div>
+
+  <ol id="results" aria-live="polite"></ol>
+
+  <footer>Deterministic ranker · corpus read over MCP · checked by a CI golden eval ·
+  <a href="https://github.com/canglang-social/learn-to-ship">source on GitHub</a> ·
+  API: <code>POST /rank</code></footer>
+</main>
+
+<script>
+  const DEMO = [
+    ["Take a Flutter course and ship a small mobile app", "flutter, mobile"],
+    ["Implement OAuth2 login with token encryption", "oauth, auth, security"],
+    ["Containerize a service and deploy it to Kubernetes", "docker, kubernetes, deploy"],
+    ["Learn to bake sourdough bread", "cooking"],
+  ];
+  const items = document.getElementById("items");
+  const results = document.getElementById("results");
+
+  function addRow(title = "", tags = "") {
+    const row = document.createElement("div");
+    row.className = "item";
+    row.innerHTML =
+      '<input class="title" placeholder="Something you could study next" aria-label="Study item">' +
+      '<input class="tags" placeholder="tags, comma, separated" aria-label="Tags">' +
+      '<button type="button" class="remove" aria-label="Remove item">×</button>';
+    row.querySelector(".title").value = title;
+    row.querySelector(".tags").value = tags;
+    row.querySelector(".remove").addEventListener("click", () => row.remove());
+    items.appendChild(row);
+  }
+  DEMO.forEach(([t, g]) => addRow(t, g));
+  document.getElementById("add").addEventListener("click", () => addRow());
+
+  async function rank() {
+    const candidates = [...items.querySelectorAll(".item")]
+      .map((row, i) => ({
+        id: "item-" + (i + 1),
+        title: row.querySelector(".title").value.trim(),
+        tags: row.querySelector(".tags").value.split(",").map(s => s.trim()).filter(Boolean),
+      }))
+      .filter(c => c.title);
+    results.innerHTML = "";
+    if (!candidates.length) {
+      results.innerHTML = '<li class="error">Add at least one study item first.</li>';
+      return;
+    }
+    const btn = document.getElementById("rank");
+    btn.disabled = true;
+    try {
+      const res = await fetch("/rank", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ candidates }),
+      });
+      if (!res.ok) throw new Error("rank failed: HTTP " + res.status);
+      const { ranked } = await res.json();
+      ranked.forEach(r => {
+        const li = document.createElement("li");
+        const score = document.createElement("span");
+        score.className = "score" + (r.score === 0 ? " zero" : "");
+        score.textContent = r.score.toFixed(2);
+        const body = document.createElement("div");
+        const title = document.createElement("div");
+        title.className = "title";
+        title.textContent = r.title;
+        const why = document.createElement("div");
+        why.className = "rationale";
+        why.textContent = r.rationale;
+        body.append(title, why);
+        li.append(score, body);
+        results.appendChild(li);
+      });
+    } catch (err) {
+      results.innerHTML = '<li class="error">Could not rank: ' + err.message + "</li>";
+    } finally {
+      btn.disabled = false;
+    }
+  }
+  document.getElementById("rank").addEventListener("click", rank);
+</script>
+</body>
+</html>
