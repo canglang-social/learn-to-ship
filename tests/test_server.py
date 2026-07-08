@@ -31,9 +31,13 @@ def test_rank_roundtrip_through_http():
         "/rank",
         json={"candidates": [{"id": "a", "title": "Ship a Flutter app", "tags": ["flutter"]}]},
     )
-    (item,) = res.json()["ranked"]
+    body = res.json()
+    (item,) = body["ranked"]
     assert item["gap_priority"] == 1
     assert "Mobile" in item["rationale"]
+    # Coverage (Q7): one candidate covers gap #1, so priority gaps 2–5 are
+    # uncovered — the API names the silence instead of hiding it.
+    assert [g["priority"] for g in body["uncovered"]] == [2, 3, 4, 5]
 
 
 def test_styled_docs_pages_render_the_markdown():

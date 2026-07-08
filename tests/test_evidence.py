@@ -72,3 +72,4 @@ def test_rank_cli_logs_a_rank_event(capsys):
     assert event["candidates"] == 8
     assert len(event["top"]) == 3
     assert event["source"].endswith("study-candidates.yaml")
+    assert event["uncovered"] == 0  # the example list covers the whole ladder

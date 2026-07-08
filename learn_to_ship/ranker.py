@@ -83,3 +83,16 @@ def rank(candidates: list[StudyItem], gaps: list[Gap]) -> list[RankedItem]:
 
     scored.sort(key=lambda t: (-t[0], -t[1], -t[2], t[3]))
     return [row[-1] for row in scored]
+
+
+def uncovered(ranked: list[RankedItem], gaps: list[Gap]) -> list[Gap]:
+    """Priority gaps that no candidate unblocks — the study list's blind spots.
+
+    rank is a filter: it can only order what the human captured, so a gap with
+    no candidate is invisible in the ranking. This is the inverse view
+    (QUESTIONS.md Q7): every gap on the priority ladder with no item at all,
+    sorted by priority — the top of this list is the most valuable silence.
+    """
+    cited = {r.gap.id for r in ranked if r.gap is not None}
+    missing = [g for g in gaps if g.priority is not None and g.id not in cited]
+    return sorted(missing, key=lambda g: g.priority)

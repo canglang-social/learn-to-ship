@@ -162,4 +162,4 @@ async def rank(req: RankRequest) -> dict:
     """Rank a candidate study list by which JD gap each item unblocks."""
     candidates = [c.model_dump() for c in req.candidates]
     result = await _graph.ainvoke({"candidates": candidates})
-    return {"ranked": result["ranked"]}
+    return {"ranked": result["ranked"], "uncovered": result.get("uncovered", [])}

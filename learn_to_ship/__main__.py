@@ -51,8 +51,8 @@ def load_candidates(path: Path) -> list[StudyItem]:
     return [StudyItem.from_dict(c) for c in data.get("candidates", [])]
 
 
-async def _rank(candidates: list[StudyItem]):
-    return (await build_graph().ainvoke({"candidates": candidates}))["ranked"]
+async def _rank(candidates: list[StudyItem]) -> dict:
+    return await build_graph().ainvoke({"candidates": candidates})
 
 
 def cmd_rank(args: argparse.Namespace) -> None:
@@ -68,18 +68,29 @@ def cmd_rank(args: argparse.Namespace) -> None:
     else:
         candidates = load_candidates(args.candidates)
         source = str(args.candidates)
-    ranked = asyncio.run(_rank(candidates))
+    result = asyncio.run(_rank(candidates))
+    ranked, missing = result["ranked"], result.get("uncovered", [])
     # Usage evidence: the fact that you ranked (and what led) is part of the loop.
     evidence.log_event(
-        "rank", candidates=len(ranked), top=[r["id"] for r in ranked[:3]], source=source
+        "rank",
+        candidates=len(ranked),
+        top=[r["id"] for r in ranked[:3]],
+        source=source,
+        uncovered=len(missing),
     )
     if args.json:
-        print(json.dumps(ranked, indent=2, ensure_ascii=False))
+        print(json.dumps({"ranked": ranked, "uncovered": missing}, indent=2, ensure_ascii=False))
         return
     print("Study this next — ranked by which JD gap it unblocks:\n")
     for i, r in enumerate(ranked, 1):
         print(f"{i}. [{r['score']:.2f}] {r['title']}")
         print(f"   {r['rationale']}\n")
+    if missing:
+        print("Uncovered priority gaps — nothing in this list unblocks them:")
+        for g in missing:
+            pct = round(g["freq"] * 100)
+            print(f"  #{g['priority']} {g['competency']} (asked in ~{pct}% of JDs, you are '{g['level']}')")
+        print("  → capture study ideas for these, or run `propose` for drafts.")
 
 
 # --- recall -------------------------------------------------------------------
