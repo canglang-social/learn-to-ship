@@ -106,11 +106,18 @@ second graph (`card-reviewer`) checks each one:
   right / supported by your source? It flags problems; it never rewrites.
 
 ```bash
-# Format checks only (no key needed):
-uv run python -m learn_to_ship recall --cards my-cards.md
+# Check today's journal straight from your Logseq vault
+# (set LTS_VAULT_PATH in .env — the folder that contains journals/):
+uv run python -m learn_to_ship recall --today
+uv run python -m learn_to_ship recall --journal 2026-07-07
 
-# Full check — needs ANTHROPIC_API_KEY (in .env). --material grounds correctness:
-uv run python -m learn_to_ship recall --cards my-cards.md --material README.md
+# Or point at any file — or a directory, scanned for #card blocks:
+uv run python -m learn_to_ship recall --cards path/to/cards.md
+uv run python -m learn_to_ship recall --cards path/to/vault/journals
+
+# Format checks alone need no key. With ANTHROPIC_API_KEY (in .env) you also
+# get complexity + correctness; --material grounds correctness in your source:
+uv run python -m learn_to_ship recall --today --material notes/langgraph.md
 ```
 
 Local-only (needs your key; the hosted deploy stays rank-only). Cards look like:
