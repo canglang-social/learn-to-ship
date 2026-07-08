@@ -54,7 +54,10 @@ study next).
   logic of its own; recall stays local (needs a key + writes nothing hosted).
   *Amended in v1.1 (QUESTIONS.md Q4):* the wrapper now also serves ONE static
   demo front page at `GET /` — no build toolchain, no auth, no persistence, no
-  DB; recall stays CLI/local. Anything beyond that single page remains out.
+  DB; recall stays CLI/local. *Amended in v1.3 (Q5):* plus styled read-only
+  renderings of the canonical `docs/*.md` at `GET /docs/*` (shared theme, no
+  new content surface — the Markdown stays the source of truth). Anything
+  beyond these read-only pages remains out.
 
 ## Requirements / User stories
 
@@ -156,6 +159,17 @@ user-question log — demand signals live there; decisions land here).
 - **Milestone convention hardened.** Each milestone now gets an annotated git
   tag (`vX.Y`) on the merge commit, alongside the LOG.md entry (`v1.1` tagged
   retroactively the same day).
+
+## Resolved during the v1.3 build (2026-07-08)
+
+- **Styled docs routes (QUESTIONS.md Q5).** The user liked the artifact-style
+  doc pages, but GitHub doesn't render committed HTML — so the served app now
+  renders the canonical `docs/*.md` as styled pages at `GET /docs/usage` and
+  `GET /docs/development`: shared design tokens extracted to
+  `static/theme.css` (front page + docs, the second use that justified
+  extraction), python-`markdown` server-side, mermaid.js client-side for the
+  atlas diagrams, OpenAPI UI moved to `/api-docs`. One source of truth, three
+  faces: GitHub Markdown, styled pages on the Space, the same locally.
 
 ## Open questions
 

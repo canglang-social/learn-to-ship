@@ -34,3 +34,35 @@ def test_rank_roundtrip_through_http():
     (item,) = res.json()["ranked"]
     assert item["gap_priority"] == 1
     assert "Mobile" in item["rationale"]
+
+
+def test_styled_docs_pages_render_the_markdown():
+    for slug, marker in (("usage", "The atlas"), ("development", "Architecture map")):
+        res = client.get(f"/docs/{slug}")
+        assert res.status_code == 200
+        assert res.headers["content-type"].startswith("text/html")
+        assert marker in res.text
+        # Mermaid blocks survive as fenced code for the client-side renderer.
+        assert "language-mermaid" in res.text
+
+
+def test_docs_cross_links_point_at_routes_not_files():
+    res = client.get("/docs/usage")
+    assert 'href="/docs/development"' in res.text
+    assert 'href="DEVELOPMENT.md"' not in res.text
+
+
+def test_docs_index_redirects_to_usage():
+    res = client.get("/docs", follow_redirects=False)
+    assert res.status_code in (302, 307)
+    assert res.headers["location"] == "/docs/usage"
+
+
+def test_unknown_doc_is_404():
+    assert client.get("/docs/nope").status_code == 404
+
+
+def test_shared_theme_is_served_and_linked():
+    assert client.get("/static/theme.css").status_code == 200
+    for path in ("/", "/docs/usage"):
+        assert 'href="/static/theme.css"' in client.get(path).text

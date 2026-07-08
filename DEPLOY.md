@@ -4,6 +4,8 @@ The hosted agent ships as a small FastAPI container (`learn_to_ship/server.py` +
 `Dockerfile`) exposing the **rank** graph only:
 
 - `GET  /` — the demo front page (edit a study list → ranked in the browser)
+- `GET  /docs/usage`, `GET /docs/development` — the canonical `docs/*.md`,
+  rendered in the site style (OpenAPI UI is at `/api-docs`)
 - `GET  /health` — health check
 - `POST /rank` — `{"candidates": [{id, title, tags}]}` → ranked list
 

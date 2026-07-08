@@ -4,6 +4,23 @@ Dated milestones for learn-to-ship. Newest first. Each entry marks a real
 shipping step (skeleton → stub graph ranks → CI eval green → deployed → real
 corpus wired), per the build-in-public rule in CLAUDE.md.
 
+## 2026-07-08 — v1.3 shipped: the docs get the artifact treatment
+
+QUESTIONS.md Q5: the user liked the artifact-styled doc pages — but GitHub
+renders Markdown, not committed HTML. Resolution: one source, three faces.
+
+- `docs/USAGE.md` + `docs/DEVELOPMENT.md` became canonical in-repo guides
+  (PR #5), each led by a Mermaid map — the usage-loop atlas and the module
+  architecture. GitHub renders them natively.
+- The served app now renders those same files as styled pages —
+  `GET /docs/usage`, `GET /docs/development` — using the design tokens
+  extracted to `static/theme.css` (shared with the front page; the second
+  use that justified extraction). Mermaid renders client-side; the OpenAPI
+  UI moved to `/api-docs`. No duplicated content, no drift.
+
+51 hermetic tests green. Verified in a real browser, style matching the
+original artifacts.
+
 ## 2026-07-08 — v1.2 shipped: usage-evidence capture closes the loop
 
 QUESTIONS.md Q3 asked what sits between the corpus (input) and the cards
