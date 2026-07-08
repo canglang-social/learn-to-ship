@@ -80,6 +80,8 @@ Format per entry:
 - **Status:** answered — pairs with spec.md's open question; candidate to
   become the v1.1/v2 organizing theme (close the loop, don't enter the middle).
 
+## Q2 · 2026-07-08 — Where are my cards?
+
 - **Asked:** Where are my cards? I tried to run
   `uv run python -m learn_to_ship recall --cards my-cards.md` (from the usage
   guide) and there is no such file.
