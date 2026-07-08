@@ -83,9 +83,27 @@ def _render_doc(slug: str) -> str:
     div.textContent = code.textContent;
     code.closest("pre").replaceWith(div);
   }});
+  // Drive the diagrams from the same design tokens as the page, so the
+  // atlas is artifact-styled in both light and dark — not mermaid default.
+  const css = getComputedStyle(document.documentElement);
+  const v = (name) => css.getPropertyValue(name).trim();
   mermaid.initialize({{
     startOnLoad: false,
-    theme: matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "neutral",
+    theme: "base",
+    themeVariables: {{
+      fontFamily: v("--sans"),
+      fontSize: "14.5px",
+      primaryColor: v("--surface"),
+      primaryTextColor: v("--ink"),
+      primaryBorderColor: v("--accent"),
+      lineColor: v("--muted"),
+      secondaryColor: v("--code-bg"),
+      tertiaryColor: v("--code-bg"),
+      clusterBkg: v("--accent-soft"),
+      clusterBorder: v("--line"),
+      edgeLabelBackground: v("--code-bg"),
+      background: v("--bg"),
+    }},
   }});
   mermaid.run();
 </script>
