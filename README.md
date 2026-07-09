@@ -26,7 +26,8 @@ curl -s -X POST https://vegekiwi-learn-to-ship.hf.space/rank \
 **Docs:** [docs/USAGE.md](docs/USAGE.md) (daily use + the loop atlas) ·
 [docs/LEARNING-LOOP.md](docs/LEARNING-LOOP.md) (the human learning loop this
 agent serves) ·
-[docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) (architecture map + dev workflows) —
+[docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) (architecture map + dev workflows) ·
+[docs/USER-TESTS.md](docs/USER-TESTS.md) (the hand-verification checklist) —
 also served styled at [/docs/usage](https://vegekiwi-learn-to-ship.hf.space/docs/usage)
 on the live deploy.
 

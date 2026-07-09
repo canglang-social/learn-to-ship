@@ -26,23 +26,6 @@ Format per entry:
 
 <!-- Entries below, newest first. -->
 
-## Q11 · 2026-07-09 — Record what the HUMAN should test
-
-- **Asked:** Maybe we should add a test file recording which tests I should
-  do? (And: which feature is next — evidence, right?)
-- **Underlying need:** pytest answers "does the hermetic core still work,"
-  but nothing answered "what should the human verify by hand, and what has
-  he already verified?" — the real-world seams (vault, corpus, LLM, deploy)
-  are exactly the ones CI deliberately never touches, and the testing state
-  lived only in conversation memory.
-- **Answer / shipped:** `docs/USER-TESTS.md` — one row per user-facing
-  behavior: how to test, what to expect, last hand-verified date. Prefilled
-  from the actual two-day dogfooding record; unchecked rows are the queue of
-  next tests (evidence recording is the top one). Update the date when a row
-  is re-verified; add rows with new features.
-- **Status:** decided 2026-07-09 — user proposed it; shipped as a docs PR.
-
-
 ## Q10 · 2026-07-09 — Proposals must re-enter MY triage; then write them to the vault
 
 - **Asked:** Does propose add its results to [[Learning/Queue]]? Are all
@@ -57,19 +40,15 @@ Format per entry:
   should land where the triage ritual already looks.
 - **Design (agreed direction):** `propose --write` (explicit flag; default
   stays print-only) appends to a dedicated machine-owned page,
-  `[[inbox/propose]]` (`LTS_PROPOSE_INBOX_PAGE`): inbox-shaped
+  `[[Learning/Propose Inbox]]` (`LTS_PROPOSE_INBOX_PAGE`): inbox-shaped
   entries — plain bullets, NO task marker, NO `route::` (LLM guess demoted
   to `route-hint::`), provenance `from:: propose (gap #N, date)`.
   Append-only, dedup, page-creation with a "machine-appended,
   human-triaged" header, refuses any other page. Spec's "vault is never
   written" narrows to exactly this surface. Capture and triage stay human:
   the page fakes neither attention nor routing.
-- **Status:** decided 2026-07-09 — user approved with one change (the page
-  is `[[inbox/propose]]`) and documented all four routes himself in
-  `docs/LEARNING-LOOP.md` (PR #14). Shipped as v1.7: inbox-shaped output
-  everywhere, `--write` appends to the machine-owned inbox page (append-only,
-  dedup by title, self-explaining header), `inbox.py` is the single write
-  surface. Queue, journals, and cards remain read-only forever.
+- **Status:** direction agreed 2026-07-09; awaiting "build" (v1.7) and the
+  user's definition of Route A for the docs.
 
 ## Q9 · 2026-07-09 — Where is my-study.yaml from, and why the inconsistent naming?
 
