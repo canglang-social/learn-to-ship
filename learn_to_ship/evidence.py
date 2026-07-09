@@ -71,6 +71,7 @@ def summarize(events: list[dict]) -> str:
 
     ranks = [e for e in events if e.get("kind") == "rank"]
     recalls = [e for e in events if e.get("kind") == "recall"]
+    proposes = [e for e in events if e.get("kind") == "propose"]
     outputs = [e for e in events if e.get("kind") == "output"]
 
     lines: list[str] = []
@@ -80,6 +81,12 @@ def summarize(events: list[dict]) -> str:
         cards = sum(e.get("cards", 0) for e in recalls)
         ok = sum(e.get("ok", 0) for e in recalls)
         lines.append(f"recall sessions: {len(recalls)} — {cards} card(s) checked, {ok} ok")
+    if proposes:
+        drafts = sum(e.get("drafts", 0) for e in proposes)
+        written = sum(e.get("written", 0) for e in proposes)
+        lines.append(
+            f"propose runs: {len(proposes)} — {drafts} draft(s), {written} delivered to the inbox"
+        )
     if outputs:
         lines.append("outputs shipped:")
         for e in outputs:
