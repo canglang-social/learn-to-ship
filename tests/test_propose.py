@@ -54,11 +54,12 @@ def test_cli_prints_paste_ready_queue_bullets(stub_proposer, tmp_path, capsys):
     lst.write_text(
         yaml.safe_dump({"candidates": [{"id": "a", "title": "Flutter app", "tags": ["flutter"]}]})
     )
-    cmd_propose(argparse.Namespace(candidates=lst, queue=False, json=False))
+    cmd_propose(argparse.Namespace(candidates=lst, queue=False, json=False, write=False))
     out = capsys.readouterr().out
-    assert "- LATER Model a star schema for a toy shop #learn #sql #etl" in out
-    assert "route:: B-practice" in out
-    assert "nothing is written for you" in out
+    assert "- Model a star schema for a toy shop" in out
+    assert "route-hint:: B-practice" in out  # pre-triage: a hint, not a route
+    assert "LATER" not in out
+    assert "nothing reaches the queue except by your hand" in out
     # And the run left a usage-evidence event behind.
     (event,) = [e for e in evidence.read_events() if e["kind"] == "propose"]
     assert event["gaps"] == 4 and event["drafts"] == 4
@@ -72,7 +73,7 @@ def test_cli_no_key_still_reports_uncovered(monkeypatch, tmp_path, capsys):
     lst.write_text(
         yaml.safe_dump({"candidates": [{"id": "a", "title": "Flutter app", "tags": ["flutter"]}]})
     )
-    cmd_propose(argparse.Namespace(candidates=lst, queue=False, json=False))
+    cmd_propose(argparse.Namespace(candidates=lst, queue=False, json=False, write=False))
     out = capsys.readouterr().out
     assert "no LLM key" in out
     assert "Gap #2" in out and "(no drafts)" in out

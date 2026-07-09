@@ -149,8 +149,19 @@ paste-ready queue bullets. You review, edit, and paste the keepers onto your
 queue page yourself — the vault is never written, so triage stays yours:
 
 ```bash
-uv run python -m learn_to_ship propose --queue    # needs an LLM key (see setup)
+uv run python -m learn_to_ship propose --queue           # print drafts (LLM key needed)
+uv run python -m learn_to_ship propose --queue --write   # + deliver to your propose inbox
 ```
+
+Drafts are **pre-triage material** (Q10): plain bullets with a
+`route-hint::` and keywords — never a task marker or a real `route::`,
+because routing is triage and triage is yours. With `--write` they are
+appended to `[[Learning/inbox/propose]]` (`LTS_PROPOSE_INBOX_PAGE`) — the
+one vault page the agent may write: append-only, one batch per gap
+(re-runs skip gaps whose drafts still await your triage) — where
+your normal triage ritual routes them A–D or cancels them (see
+[LEARNING-LOOP.md](LEARNING-LOOP.md)). Nothing reaches the queue except by
+your hand.
 
 Without a key it degrades to the coverage list (gaps, no drafts). The
 provider is chosen in `.env` — DeepSeek first for cheap testing,

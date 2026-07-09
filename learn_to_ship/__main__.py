@@ -172,6 +172,7 @@ def _rank_candidates(args: argparse.Namespace) -> tuple[list[StudyItem], str]:
 
 
 def cmd_propose(args: argparse.Namespace) -> None:
+    from . import inbox
     from .llm import has_llm_key
 
     try:
@@ -183,11 +184,20 @@ def cmd_propose(args: argparse.Namespace) -> None:
 
     result = asyncio.run(build_propose_graph().ainvoke({"candidates": candidates}))
     blocks = result["proposals"]
+
+    written = skipped = 0
+    if args.write and any(b["proposals"] for b in blocks):
+        try:
+            written, skipped, _ = inbox.append_proposals(blocks)
+        except ValueError as e:
+            raise SystemExit(f"error: {e}") from e
+
     evidence.log_event(
         "propose",
         gaps=len(blocks),
         drafts=sum(len(b["proposals"]) for b in blocks),
         source=source,
+        written=written,
     )
 
     if args.json:
@@ -203,8 +213,9 @@ def cmd_propose(args: argparse.Namespace) -> None:
             "or ANTHROPIC_API_KEY for drafts)\n"
         )
     print(
-        "Proposed study items per uncovered gap — review, edit, and paste the\n"
-        "keepers onto your queue page yourself; nothing is written for you:\n"
+        "Drafts per uncovered gap — PRE-TRIAGE suggestions (route A–D is your\n"
+        "call). Use --write to deliver them to your vault propose inbox;\n"
+        "nothing reaches the queue except by your hand:\n"
     )
     for b in blocks:
         pct = round(b["freq"] * 100)
@@ -212,10 +223,14 @@ def cmd_propose(args: argparse.Namespace) -> None:
         if not b["proposals"]:
             print("  (no drafts)")
         for p in b["proposals"]:
-            tags = " ".join(f"#{t}" for t in p["tags"])
-            print(f"  - LATER {p['title']} #learn {tags}")
-            print(f"    route:: {p['route']}")
+            print(f"  - {p['title']}")
+            print(f"    route-hint:: {p['route']} · keywords: {', '.join(p['tags'])}")
         print()
+    if args.write:
+        import os
+
+        name = os.environ.get(inbox.PROPOSE_INBOX_ENV, inbox.DEFAULT_PROPOSE_INBOX)
+        print(f"Appended {written} draft(s) to [[{name}]] ({skipped} duplicate(s) skipped).")
 
 
 # --- evidence -----------------------------------------------------------------
@@ -284,6 +299,11 @@ def main() -> None:
         "--queue",
         action="store_true",
         help="coverage against the triaged vault queue page (LTS_QUEUE_PAGE)",
+    )
+    prop_p.add_argument(
+        "--write",
+        action="store_true",
+        help="append drafts to the vault propose inbox (LTS_PROPOSE_INBOX_PAGE) for YOUR triage",
     )
     prop_p.add_argument("--json", action="store_true")
     prop_p.set_defaults(func=cmd_propose)

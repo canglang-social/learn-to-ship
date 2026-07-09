@@ -103,8 +103,13 @@ key — DeepSeek or Anthropic, see `.env.example`; prints paste-ready queue
 bullets — nothing is ever written to your vault):
 
 ```bash
-uv run python -m learn_to_ship propose --queue
+uv run python -m learn_to_ship propose --queue          # print drafts
+uv run python -m learn_to_ship propose --queue --write  # deliver to [[Learning/inbox/propose]]
 ```
+
+Drafts are pre-triage: `--write` appends them to a dedicated, machine-owned
+inbox page in your vault (the only page the agent ever writes, append-only);
+your own triage routes them onward — see [docs/LEARNING-LOOP.md](docs/LEARNING-LOOP.md).
 
 Candidate list format (`data/study-candidates.stub.yaml`) — a plain list; the agent
 picks up *after* you capture items, it does not capture for you:

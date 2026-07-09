@@ -26,7 +26,7 @@ from pydantic import BaseModel, Field
 
 from .graph import build_graph
 
-app = FastAPI(title="learn-to-ship — focus-director", version="1.6.0", docs_url="/api-docs")
+app = FastAPI(title="learn-to-ship — focus-director", version="1.7.0", docs_url="/api-docs")
 
 # Compile the graph once at startup and reuse across requests.
 _graph = build_graph()

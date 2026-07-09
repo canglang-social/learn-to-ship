@@ -4,6 +4,25 @@ Dated milestones for learn-to-ship. Newest first. Each entry marks a real
 shipping step (skeleton → stub graph ranks → CI eval green → deployed → real
 corpus wired), per the build-in-public rule in CLAUDE.md.
 
+## 2026-07-09 — v1.7 shipped: propose-inbox — drafts re-enter the human loop
+
+QUESTIONS.md Q10, the sharpest boundary catch yet — from the user: propose's
+output was queue-shaped (`LATER` + `route::`), which silently pre-performed
+his triage. Machine drafts are pre-triage material.
+
+- Output reshaped everywhere: plain bullets + `route-hint::` (a hint, not a
+  route) + keywords; no task marker.
+- `propose --write` appends drafts to `[[Learning/inbox/propose]]` — the ONE
+  vault surface the agent may write (`inbox.py`): append-only, dedup by
+  title, self-explaining header, any other page unreachable.
+- The loop itself is now documented by its owner: `docs/LEARNING-LOOP.md`
+  (PR #14) — capture → triage → routes A–D → retrieval tail, with the three
+  rules and the evidence. The agent's table of entry points lives there.
+
+74 hermetic tests green. Boundary after the amendment: the human owns
+capture, triage, study, output, cards; the agent ranks, proposes into its
+own inbox, critiques, and reports.
+
 ## 2026-07-08 — v1.6 shipped: DeepSeek first, Anthropic one line away
 
 QUESTIONS.md Q8: test the LLM features cheap, upgrade deliberately. The two
