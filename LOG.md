@@ -12,7 +12,7 @@ his triage. Machine drafts are pre-triage material.
 
 - Output reshaped everywhere: plain bullets + `route-hint::` (a hint, not a
   route) + keywords; no task marker.
-- `propose --write` appends drafts to `[[Learning/inbox/propose]]` — the ONE
+- `propose --write` appends drafts to `[[inbox/propose]]` — the ONE
   vault surface the agent may write (`inbox.py`): append-only, dedup by
   title, self-explaining header, any other page unreachable.
 - The loop itself is now documented by its owner: `docs/LEARNING-LOOP.md`

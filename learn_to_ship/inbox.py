@@ -22,7 +22,7 @@ from pathlib import Path
 from .vault import vault_path
 
 PROPOSE_INBOX_ENV = "LTS_PROPOSE_INBOX_PAGE"
-DEFAULT_PROPOSE_INBOX = "Learning/inbox/propose"
+DEFAULT_PROPOSE_INBOX = "inbox/propose"
 
 _HEADER = (
     "- Machine-appended inbox — drafts from `propose --write` for uncovered JD\n"

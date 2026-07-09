@@ -156,7 +156,7 @@ uv run python -m learn_to_ship propose --queue --write   # + deliver to your pro
 Drafts are **pre-triage material** (Q10): plain bullets with a
 `route-hint::` and keywords — never a task marker or a real `route::`,
 because routing is triage and triage is yours. With `--write` they are
-appended to `[[Learning/inbox/propose]]` (`LTS_PROPOSE_INBOX_PAGE`) — the
+appended to `[[inbox/propose]]` (`LTS_PROPOSE_INBOX_PAGE`) — the
 one vault page the agent may write: append-only, one batch per gap
 (re-runs skip gaps whose drafts still await your triage) — where
 your normal triage ritual routes them A–D or cancels them (see

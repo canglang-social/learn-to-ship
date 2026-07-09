@@ -49,7 +49,7 @@ study next).
   `#inbox` onto the vault queue page; the agent only READS the already-triaged
   result (`rank --queue`). No agent-side triage is planned anymore.
   *Amended in v1.7 (Q10):* the agent may write exactly ONE vault surface —
-  the machine-owned propose inbox (`[[Learning/inbox/propose]]`), append-only,
+  the machine-owned propose inbox (`[[inbox/propose]]`), append-only,
   on explicit `--write`, carrying pre-triage suggestions (no task marker, no
   `route::`). Capture lines, the queue, journals, and cards stay unwritable.
 - v0 does NOT do focus-guardian (keep-session-on-rails) — v2.
@@ -212,7 +212,7 @@ user-question log — demand signals live there; decisions land here).
 - **Propose-inbox (QUESTIONS.md Q10).** Propose output was queue-shaped
   (`LATER` + `route::`) — silently pre-performing the human's triage. Now it
   is inbox-shaped everywhere (plain bullets, `route-hint::`, provenance), and
-  `propose --write` appends it to `[[Learning/inbox/propose]]`
+  `propose --write` appends it to `[[inbox/propose]]`
   (`LTS_PROPOSE_INBOX_PAGE`) — the single vault surface the agent may write:
   append-only, dedup by title, self-explaining page header, implemented in
   `inbox.py` and nowhere else. The human triages entries per

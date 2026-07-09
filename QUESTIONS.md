@@ -40,7 +40,7 @@ Format per entry:
   should land where the triage ritual already looks.
 - **Design (agreed direction):** `propose --write` (explicit flag; default
   stays print-only) appends to a dedicated machine-owned page,
-  `[[Learning/inbox/propose]]` (`LTS_PROPOSE_INBOX_PAGE`): inbox-shaped
+  `[[inbox/propose]]` (`LTS_PROPOSE_INBOX_PAGE`): inbox-shaped
   entries — plain bullets, NO task marker, NO `route::` (LLM guess demoted
   to `route-hint::`), provenance `from:: propose (gap #N, date)`.
   Append-only, dedup, page-creation with a "machine-appended,
@@ -48,7 +48,7 @@ Format per entry:
   written" narrows to exactly this surface. Capture and triage stay human:
   the page fakes neither attention nor routing.
 - **Status:** decided 2026-07-09 — user approved with one change (the page
-  is `[[Learning/inbox/propose]]`) and documented all four routes himself in
+  is `[[inbox/propose]]`) and documented all four routes himself in
   `docs/LEARNING-LOOP.md` (PR #14). Shipped as v1.7: inbox-shaped output
   everywhere, `--write` appends to the machine-owned inbox page (append-only,
   dedup by title, self-explaining header), `inbox.py` is the single write

@@ -39,7 +39,7 @@ def fake_vault(tmp_path, monkeypatch):
 def test_first_write_creates_the_page_with_header(fake_vault):
     added, skipped, path = inbox.append_proposals(BLOCKS)
     assert (added, skipped) == (1, 0)
-    assert path == fake_vault / "pages" / "Learning___inbox___propose.md"
+    assert path == fake_vault / "pages" / "inbox___propose.md"
     text = path.read_text()
     assert "Machine-appended inbox" in text  # the page explains itself
     assert "- Model a star schema for a toy shop" in text
@@ -109,8 +109,8 @@ def test_cli_write_flag_appends_and_dedups_across_gaps(fake_vault, tmp_path, mon
     )
     cmd_propose(argparse.Namespace(candidates=lst, queue=False, json=False, write=True))
     out = capsys.readouterr().out
-    assert "Appended 1 draft(s) to [[Learning/inbox/propose]] (3 duplicate(s) skipped)." in out
+    assert "Appended 1 draft(s) to [[inbox/propose]] (3 duplicate(s) skipped)." in out
     text = inbox.propose_inbox_path().read_text()
     assert text.count("- Build a warehouse demo") == 1
     # And only the propose-inbox page exists — no other vault file was touched.
-    assert [p.name for p in (fake_vault / "pages").iterdir()] == ["Learning___inbox___propose.md"]
+    assert [p.name for p in (fake_vault / "pages").iterdir()] == ["inbox___propose.md"]

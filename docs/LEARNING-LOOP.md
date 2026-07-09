@@ -112,7 +112,7 @@ and not a generator.
 | Loop point | Agent feature | Boundary held |
 |---|---|---|
 | Triaged queue | `rank --queue` reads the queue page | read-only; capture and triage stay human |
-| Queue blind spots | coverage footer + `propose --queue [--write]` | drafts are pre-triage: `--write` appends them to `[[Learning/inbox/propose]]` (the one page the agent may write, append-only); the human routes A–D |
+| Queue blind spots | coverage footer + `propose --queue [--write]` | drafts are pre-triage: `--write` appends them to `[[inbox/propose]]` (the one page the agent may write, append-only); the human routes A–D |
 | The output | `evidence --item --output` + the trail | the human records and updates the corpus; the agent only nudges |
 | The cards | `recall` — format, complexity, correctness | critiques only; never writes or generates a card |
 

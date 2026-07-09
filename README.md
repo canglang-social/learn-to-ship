@@ -104,7 +104,7 @@ bullets — nothing is ever written to your vault):
 
 ```bash
 uv run python -m learn_to_ship propose --queue          # print drafts
-uv run python -m learn_to_ship propose --queue --write  # deliver to [[Learning/inbox/propose]]
+uv run python -m learn_to_ship propose --queue --write  # deliver to [[inbox/propose]]
 ```
 
 Drafts are pre-triage: `--write` appends them to a dedicated, machine-owned
