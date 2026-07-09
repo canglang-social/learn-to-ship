@@ -26,6 +26,20 @@ Format per entry:
 
 <!-- Entries below, newest first. -->
 
+## Q12 · 2026-07-09 — Commands in USER-TESTS.md are incomplete (`…`)
+
+- **Asked:** The commands in USER-TESTS.md aren't complete — e.g.
+  `… recall --journal 2026-07-07`. What is the `…`?
+- **Underlying need:** copy-paste runnability. The `…` abbreviated
+  `uv run python -m learn_to_ship` for table width, but a checklist's
+  commands must run as written — this is the Q2 lesson recurring (the
+  usage guide once showed a placeholder file that didn't exist).
+- **Fix / convention:** all commands expanded in USER-TESTS.md, and the
+  rule is now stated in CLAUDE.md conventions: docs commands are
+  copy-paste complete — no ellipses, no fake placeholders.
+- **Status:** fixed 2026-07-09.
+
+
 ## Q11 · 2026-07-09 — Record what the HUMAN should test
 
 - **Asked:** Maybe we should add a test file recording which tests I should
