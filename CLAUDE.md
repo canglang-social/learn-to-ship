@@ -11,7 +11,9 @@ unblocks, reading the JD-gap corpus through an MCP tool. It is NOT a capture
 tool — `#inbox` capture is Felix-owned; the agent picks up after capture. v1
 adds a second graph, `card-reviewer`, that checks flashcards I author (format +
 complexity + correctness); it never generates cards. Keep `spec.md` the source
-of truth for scope.
+of truth for scope. `docs/LEARNING-LOOP.md` describes the human learning loop
+this agent serves (stages, routes, the three rules, agent touchpoints) — read
+it before designing any feature that touches the loop.
 
 ## Tech stack
 

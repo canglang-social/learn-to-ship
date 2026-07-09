@@ -226,5 +226,6 @@ so it's for demos, not daily ranking. API: `GET /health`, `POST /rank`.
 
 ---
 
-*Companion: [DEVELOPMENT.md](DEVELOPMENT.md). Docs regenerated 2026-07-08 at
+*Companions: [LEARNING-LOOP.md](LEARNING-LOOP.md) (the human loop this tool
+serves) · [DEVELOPMENT.md](DEVELOPMENT.md). Docs regenerated 2026-07-08 at
 v1.2; if behavior and docs disagree, trust the code and open an issue.*

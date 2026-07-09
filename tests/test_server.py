@@ -41,7 +41,11 @@ def test_rank_roundtrip_through_http():
 
 
 def test_styled_docs_pages_render_the_markdown():
-    for slug, marker in (("usage", "The atlas"), ("development", "Architecture map")):
+    for slug, marker in (
+        ("usage", "The atlas"),
+        ("development", "Architecture map"),
+        ("learning-loop", "The three rules"),
+    ):
         res = client.get(f"/docs/{slug}")
         assert res.status_code == 200
         assert res.headers["content-type"].startswith("text/html")
@@ -53,7 +57,9 @@ def test_styled_docs_pages_render_the_markdown():
 def test_docs_cross_links_point_at_routes_not_files():
     res = client.get("/docs/usage")
     assert 'href="/docs/development"' in res.text
+    assert 'href="/docs/learning-loop"' in res.text
     assert 'href="DEVELOPMENT.md"' not in res.text
+    assert 'href="LEARNING-LOOP.md"' not in res.text
 
 
 def test_docs_index_redirects_to_usage():

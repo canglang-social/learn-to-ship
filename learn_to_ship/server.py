@@ -6,9 +6,9 @@ load_dotenv, so a deployed container has no LTS_CORPUS_PATH and serves the publi
 stub corpus — the private corpus never reaches a hosted service.
 
 Human-facing pages (all styled by the shared theme in static/theme.css):
-`GET /` — the demo front page (QUESTIONS.md Q4); `GET /docs/{usage,development}`
-— the canonical docs/*.md rendered as styled pages (Q5; the Markdown stays the
-source of truth). The JSON API is `POST /rank` + `GET /health`; FastAPI's
+`GET /` — the demo front page (QUESTIONS.md Q4);
+`GET /docs/{usage,development,learning-loop}` — the canonical docs/*.md rendered
+as styled pages (Q5; the Markdown stays the source of truth). The JSON API is `POST /rank` + `GET /health`; FastAPI's
 OpenAPI UI lives at /api-docs so /docs belongs to human readers.
 
 Run locally:  uv run uvicorn learn_to_ship.server:app --port 7860
@@ -48,12 +48,14 @@ _PAGE = (_STATIC / "index.html").read_text(encoding="utf-8")
 _DOC_PAGES = {
     "usage": (_DOCS_DIR / "USAGE.md", "Usage guide"),
     "development": (_DOCS_DIR / "DEVELOPMENT.md", "Development guide"),
+    "learning-loop": (_DOCS_DIR / "LEARNING-LOOP.md", "Learning loop"),
 }
 
 # Rewrite the docs' cross-links from GitHub-relative to served routes.
 _LINK_MAP = {
     'href="USAGE.md"': 'href="/docs/usage"',
     'href="DEVELOPMENT.md"': 'href="/docs/development"',
+    'href="LEARNING-LOOP.md"': 'href="/docs/learning-loop"',
 }
 
 
