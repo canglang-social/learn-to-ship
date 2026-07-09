@@ -26,6 +26,34 @@ Format per entry:
 
 <!-- Entries below, newest first. -->
 
+## Q10 · 2026-07-09 — Proposals must re-enter MY triage; then write them to the vault
+
+- **Asked:** Does propose add its results to [[Learning/Queue]]? Are all
+  proposals even *for* the queue? My loop is inbox → triage → four routes —
+  shouldn't propose results be re-triaged (a "propose-inbox")? And after we
+  decide that, the tool can write results into my vault, right?
+- **Underlying need:** Two things. (1) A boundary correction: the current
+  output is queue-shaped (`LATER` + `route::`), which silently pre-performs
+  the human's triage — machine proposals are pre-triage material and must
+  not arrive with routing already decided. (2) Delivery: once proposals are
+  inbox material, printing to a terminal is the wrong destination — they
+  should land where the triage ritual already looks.
+- **Design (agreed direction):** `propose --write` (explicit flag; default
+  stays print-only) appends to a dedicated machine-owned page,
+  `[[inbox/propose]]` (`LTS_PROPOSE_INBOX_PAGE`): inbox-shaped
+  entries — plain bullets, NO task marker, NO `route::` (LLM guess demoted
+  to `route-hint::`), provenance `from:: propose (gap #N, date)`.
+  Append-only, dedup, page-creation with a "machine-appended,
+  human-triaged" header, refuses any other page. Spec's "vault is never
+  written" narrows to exactly this surface. Capture and triage stay human:
+  the page fakes neither attention nor routing.
+- **Status:** decided 2026-07-09 — user approved with one change (the page
+  is `[[inbox/propose]]`) and documented all four routes himself in
+  `docs/LEARNING-LOOP.md` (PR #14). Shipped as v1.7: inbox-shaped output
+  everywhere, `--write` appends to the machine-owned inbox page (append-only,
+  dedup by title, self-explaining header), `inbox.py` is the single write
+  surface. Queue, journals, and cards remain read-only forever.
+
 ## Q9 · 2026-07-09 — Where is my-study.yaml from, and why the inconsistent naming?
 
 - **Asked:** Candidates now come from the inbox → [[Learning/Queue]] page —
