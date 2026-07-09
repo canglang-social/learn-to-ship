@@ -188,6 +188,7 @@ property lines between them are fine.
 uv run python -m learn_to_ship recall --today             # today's journal
 uv run python -m learn_to_ship recall --journal 2026-07-07
 uv run python -m learn_to_ship recall --cards path/to/file-or-directory
+uv run python -m learn_to_ship recall --all      # every card file in the vault
 uv run python -m learn_to_ship recall --today --material notes/langgraph.md
 ```
 

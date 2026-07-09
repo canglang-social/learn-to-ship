@@ -125,3 +125,14 @@ def test_queue_page_path_resolves_logseq_name_encoding(fake_vault, monkeypatch):
     monkeypatch.setenv(vault.QUEUE_PAGE_ENV, "My/Other Queue")
     with pytest.raises(ValueError, match=r"\[\[My/Other Queue\]\] not found"):
         vault.queue_page_path()
+
+
+def test_recall_all_sweeps_the_configured_vault(fake_vault):
+    from argparse import Namespace
+
+    from learn_to_ship.__main__ import _card_targets
+
+    with_cards = _journal(fake_vault, "2026_07_01.md")
+    _journal(fake_vault, "2026_07_02.md", text="- no cards here\n")
+    targets = _card_targets(Namespace(today=False, journal=None, all=True, cards=None))
+    assert targets == [with_cards]

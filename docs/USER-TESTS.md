@@ -34,6 +34,7 @@ user-verified · *(auto)* = also exercised by `pytest -m live`.
 | Format lint on real cards | any card file, no key needed | missing 中文 / tags / `#q/*` flagged | ☑ 2026-07-08 |
 | LLM content checks *(auto)* | `uv run pytest -m live` | planted factual error + compound card both flagged | ☑ 2026-07-09 |
 | Full check on YOUR OWN cards | write real cards, `uv run python -m learn_to_ship recall --today --material <source>` | complexity/correctness verdicts you agree with | ☐ |
+| Whole-vault sweep (Q13) | `uv run python -m learn_to_ship recall --all` | every card file reviewed, grouped per file | ☐ |
 
 ## evidence  ← next up
 
