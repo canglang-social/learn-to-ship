@@ -15,33 +15,33 @@ user-verified · *(auto)* = also exercised by `pytest -m live`.
 | --- | --- | --- | --- |
 | `rank --queue` against the real corpus | `uv run python -m learn_to_ship rank --queue` | queue items ranked, each citing a real gap with a rationale | ☑ 2026-07-08 |
 | Coverage footer (v1.5) | same command | "Uncovered priority gaps" lists ladder gaps with no queue item | ☑ 2026-07-09 |
-| YAML fallback | `… --candidates data/study-candidates.real.yaml` | same shape, from the file | ☐ |
-| `--json` shape | `… rank --queue --json` | `{"ranked": …, "uncovered": …}` | ☐ |
+| YAML fallback | `uv run python -m learn_to_ship --candidates data/study-candidates.real.yaml` | same shape, from the file | ☐ |
+| `--json` shape | `uv run python -m learn_to_ship rank --queue --json` | `{"ranked": …, "uncovered": …}` | ☐ |
 
 ## propose
 
 | Behavior | How to test | Expect | Status |
 | --- | --- | --- | --- |
 | Drafts for uncovered gaps | `uv run python -m learn_to_ship propose --queue` | 2–3 pre-triage drafts per uncovered gap (`route-hint::`, no `LATER`) | ☑ 2026-07-09 |
-| `--write` to the vault inbox | `… propose --queue --write`, then open `[[inbox/propose]]` | drafts appended below the header; re-run appends 0 (one batch per gap) | ☑ 2026-07-09 |
+| `--write` to the vault inbox | `uv run python -m learn_to_ship propose --queue --write`, then open `[[inbox/propose]]` | drafts appended below the header; re-run appends 0 (one batch per gap) | ☑ 2026-07-09 |
 | Triage round-trip | route a draft A–D onto the queue, re-run `rank --queue` | the routed item now ranks; its gap leaves the uncovered footer | ☐ |
 
 ## recall
 
 | Behavior | How to test | Expect | Status |
 | --- | --- | --- | --- |
-| Vault resolution | `… recall --journal 2026-07-07` / `--today` | finds the journal; loud error when no journal exists | ☑ 2026-07-08 |
+| Vault resolution | `uv run python -m learn_to_ship recall --journal 2026-07-07` / `--today` | finds the journal; loud error when no journal exists | ☑ 2026-07-08 |
 | Format lint on real cards | any card file, no key needed | missing 中文 / tags / `#q/*` flagged | ☑ 2026-07-08 |
 | LLM content checks *(auto)* | `uv run pytest -m live` | planted factual error + compound card both flagged | ☑ 2026-07-09 |
-| Full check on YOUR OWN cards | write real cards, `… recall --today --material <source>` | complexity/correctness verdicts you agree with | ☐ |
+| Full check on YOUR OWN cards | write real cards, `uv run python -m learn_to_ship recall --today --material <source>` | complexity/correctness verdicts you agree with | ☐ |
 
 ## evidence  ← next up
 
 | Behavior | How to test | Expect | Status |
 | --- | --- | --- | --- |
 | Auto-logging | just use rank/recall/propose, then `uv run python -m learn_to_ship evidence` | trail lists your runs with dates | ☐ (3 events already waiting) |
-| Record a shipped output | `… evidence --item <id> --output <url> --note "…"` (the id = the slug rank shows) | "Recorded: <id> → <url>" | ☐ |
-| The nudge | `… evidence` again | output listed under its item + "consider updating their levels in your corpus" | ☐ |
+| Record a shipped output | `uv run python -m learn_to_ship evidence --item <id> --output <url> --note "…"` (the id = the slug rank shows) | "Recorded: <id> → <url>" | ☐ |
+| The nudge | `uv run python -m learn_to_ship evidence` again | output listed under its item + "consider updating their levels in your corpus" | ☐ |
 
 ## LLM provider
 

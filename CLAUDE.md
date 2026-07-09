@@ -35,6 +35,8 @@ it before designing any feature that touches the loop.
 - Small, single-purpose modules; no framework until a second use demands it.
 - Type hints on public functions; docstrings state intent, not mechanics.
 - Conventional commits (feat:, fix:, docs:, chore:).
+- Docs commands are copy-paste complete — no `…` abbreviations, no placeholder
+  paths that don't exist (twice-learned: QUESTIONS.md Q2, Q12).
 
 ## Build in public (agent public / career data private)
 
