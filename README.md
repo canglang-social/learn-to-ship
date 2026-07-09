@@ -87,7 +87,7 @@ uv sync
 uv run python -m learn_to_ship
 
 # Rank your own list, as JSON
-uv run python -m learn_to_ship --candidates data/study-candidates.yaml --json
+uv run python -m learn_to_ship --candidates data/study-candidates.stub.yaml --json
 
 # Rank your Logseq queue page directly — no retyping. You triage #inbox onto
 # the page (default [[Learning/Queue]], override LTS_QUEUE_PAGE); it only reads:
@@ -104,7 +104,7 @@ bullets — nothing is ever written to your vault):
 uv run python -m learn_to_ship propose --queue
 ```
 
-Candidate list format (`data/study-candidates.yaml`) — a plain list; the agent
+Candidate list format (`data/study-candidates.stub.yaml`) — a plain list; the agent
 picks up *after* you capture items, it does not capture for you:
 
 ```yaml

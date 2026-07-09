@@ -53,7 +53,13 @@ Format per entry:
   and docs. Low value for daily use (the queue is primary now), but worth it
   for the repo's coherence as a portfolio artifact — a stranger reading
   `data/` should grasp the public/private split instantly.
-- **Status:** answered 2026-07-09 — rename proposed, awaiting decision.
+- **Status:** decided 2026-07-09 — user approved ("rename"); shipped:
+  `study-candidates.stub.yaml` (committed) / `study-candidates.real.yaml`
+  (private, renamed locally too), ignore pattern `data/*.real.yaml`, all
+  references updated. Origin question also answered: my-study.yaml was
+  hand-authored on 2026-07-06 by the v0 build session (Felix + Claude)
+  transcribing his real plans — not derived from the job_hunting repo,
+  which supplies only the corpus side.
 
 ## Q8 · 2026-07-08 — Use DeepSeek first; maybe Anthropic later
 
