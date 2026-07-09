@@ -26,6 +26,18 @@ Format per entry:
 
 <!-- Entries below, newest first. -->
 
+## Q13 · 2026-07-09 — Whole-vault recall without typing the path
+
+- **Asked:** So we don't have an all-cards recall check?
+- **Underlying need:** We did (`--cards <directory>`, since v1.1) — but the
+  sweep required hand-typing the 100-character quoted vault path that Q2
+  eliminated for single journals, even though `LTS_VAULT_PATH` already knows
+  where the vault is.
+- **Shipped:** `recall --all` — sweeps every card file in the configured
+  vault; identical to `--cards <vault-root>` with zero path typing.
+- **Status:** decided 2026-07-09 ("add q13. go"); shipped same day.
+
+
 ## Q12 · 2026-07-09 — Commands in USER-TESTS.md are incomplete (`…`)
 
 - **Asked:** The commands in USER-TESTS.md aren't complete — e.g.

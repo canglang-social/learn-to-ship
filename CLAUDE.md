@@ -23,7 +23,7 @@ it before designing any feature that touches the loop.
 
 - Env: uv sync
 - Run (rank): uv run python -m learn_to_ship [rank --queue]
-- Run (recall): uv run python -m learn_to_ship recall --today | --journal <date> | --cards <file|dir>  [--material <file>]
+- Run (recall): uv run python -m learn_to_ship recall --today | --journal <date> | --all | --cards <file|dir>  [--material <file>]
 - Propose: uv run python -m learn_to_ship propose [--queue] [--write]   (drafts → your propose inbox)
 - Evidence: uv run python -m learn_to_ship evidence [--item <id> --output <url>]
 - Serve: uv run langgraph dev   (or the FastAPI server — see DEPLOY.md)

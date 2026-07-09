@@ -144,6 +144,7 @@ uv run python -m learn_to_ship recall --journal 2026-07-07
 # Or point at any file — or a directory, scanned for #card blocks:
 uv run python -m learn_to_ship recall --cards path/to/cards.md
 uv run python -m learn_to_ship recall --cards path/to/vault/journals
+uv run python -m learn_to_ship recall --all     # or sweep the whole configured vault
 
 # Format checks alone need no key. With an LLM key (in .env) you also get
 # complexity + correctness; --material grounds correctness in your source:

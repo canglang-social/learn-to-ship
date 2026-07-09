@@ -6,6 +6,7 @@
     uv run python -m learn_to_ship recall --cards my.md [--material README.md]
     uv run python -m learn_to_ship recall --today        # today's vault journal
     uv run python -m learn_to_ship recall --journal 2026-07-07
+    uv run python -m learn_to_ship recall --all    # every card file in the vault
     uv run python -m learn_to_ship evidence              # the usage trail
     uv run python -m learn_to_ship evidence --item k8s-deploy --output <url>
 
@@ -100,11 +101,14 @@ def cmd_rank(args: argparse.Namespace) -> None:
 
 
 def _card_targets(args: argparse.Namespace) -> list[Path]:
-    """Resolve --cards / --today / --journal into concrete card files."""
+    """Resolve --cards / --today / --journal / --all into concrete card files."""
     if args.today:
         return [vault.journal_path()]
     if args.journal:
         return [vault.journal_path(args.journal)]
+    if args.all:
+        # Q13: sweep the configured vault — no hand-typed path.
+        return vault.card_files(vault.vault_path())
     return vault.card_files(args.cards)
 
 
@@ -283,6 +287,11 @@ def main() -> None:
         "--journal",
         metavar="DATE",
         help="check the vault journal for DATE, e.g. 2026-07-07 (needs LTS_VAULT_PATH)",
+    )
+    recall_src.add_argument(
+        "--all",
+        action="store_true",
+        help="sweep every card file in the configured vault (needs LTS_VAULT_PATH)",
     )
     recall_p.add_argument(
         "--material", type=Path, help="optional source to check correctness against"

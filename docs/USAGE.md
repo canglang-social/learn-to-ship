@@ -188,8 +188,17 @@ property lines between them are fine.
 uv run python -m learn_to_ship recall --today             # today's journal
 uv run python -m learn_to_ship recall --journal 2026-07-07
 uv run python -m learn_to_ship recall --cards path/to/file-or-directory
+uv run python -m learn_to_ship recall --all      # every card file in the vault
 uv run python -m learn_to_ship recall --today --material notes/langgraph.md
 ```
+
+**Keep whole-vault sweeps keyless.** With an LLM key set, *every* card costs
+one LLM call — a full vault is 100+ calls, minutes and money for verdicts
+you'll mostly ignore in bulk. The pattern that works: `--all` with the key
+unset (or `LTS_LLM_PROVIDER=` pointed at nothing) for an instant, free
+format sweep; content checks (complexity + correctness) belong on the small
+daily surface — `--today`, ideally with `--material`. Same engine, right
+dose.
 
 | Check | Engine | Flags |
 | --- | --- | --- |
