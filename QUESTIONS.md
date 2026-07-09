@@ -26,6 +26,41 @@ Format per entry:
 
 <!-- Entries below, newest first. -->
 
+## Q9 · 2026-07-09 — Where is my-study.yaml from, and why the inconsistent naming?
+
+- **Asked:** Candidates now come from the inbox → [[Learning/Queue]] page —
+  so where is `data/my-study.yaml` from? Is it the local version of
+  `study-candidates.yaml`? And why not mark the pair with `.stub`/`.example`
+  and `.real`, like the corpus files?
+- **Answer (facts):** `my-study.yaml` predates the queue feature — created
+  in the v0 "real corpus wired for daily use" phase as the private daily
+  input; never committed (the `data/my-*.yaml` gitignore pattern covers it),
+  so it exists only in the local checkout. Yes: it is exactly the private
+  counterpart of the committed example `study-candidates.yaml`. Since v1.4,
+  `rank --queue` is the primary input and `my-study.yaml` is an ad-hoc
+  fallback via `--candidates`.
+- **Why the inconsistency (honest answer):** historical accident, not
+  design. The corpus pair got `.stub`/`.real` because the public/private
+  split was a hard rule from commit one; the candidates example was named as
+  *format documentation*, and the private file grew organically with an
+  ownership prefix (`my-`). Two naming philosophies collided: data-kind
+  marking vs ownership marking. The user is right that one scheme is better.
+- **Design implication (hypothesis):** unify on the corpus scheme —
+  `data/study-candidates.stub.yaml` (committed, paired with the stub corpus)
+  + `data/study-candidates.real.yaml` (gitignored); one ignore pattern
+  `data/*.real.yaml` then covers all private data files; keep `data/my-*`
+  ignored for back-compat so nothing ever leaks. Update `DEFAULT_CANDIDATES`
+  and docs. Low value for daily use (the queue is primary now), but worth it
+  for the repo's coherence as a portfolio artifact — a stranger reading
+  `data/` should grasp the public/private split instantly.
+- **Status:** decided 2026-07-09 — user approved ("rename"); shipped:
+  `study-candidates.stub.yaml` (committed) / `study-candidates.real.yaml`
+  (private, renamed locally too), ignore pattern `data/*.real.yaml`, all
+  references updated. Origin question also answered: my-study.yaml was
+  hand-authored on 2026-07-06 by the v0 build session (Felix + Claude)
+  transcribing his real plans — not derived from the job_hunting repo,
+  which supplies only the corpus side.
+
 ## Q8 · 2026-07-08 — Use DeepSeek first; maybe Anthropic later
 
 - **Asked:** Add an API change: I want to use DeepSeek first, to test. Maybe

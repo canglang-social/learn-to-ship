@@ -1,10 +1,11 @@
-# Example candidate study list — the input focus-director ranks.
+# STUB candidate study list — the committed, public example input
+# (naming matches jd-gaps.stub.yaml; your real list is data/study-candidates.real.yaml).
 #
 # Plain list of study items. The learner owns capture; the agent picks up AFTER
 # capture. Each item has an id, a title, and tags used to match it against the
 # JD-gap corpus. These example items are generic and pair with the fictional demo
 # corpus (data/jd-gaps.stub.yaml). Point the CLI at your own list with:
-#   uv run python -m learn_to_ship --candidates path/to/list.yaml
+#   uv run python -m learn_to_ship --candidates data/study-candidates.real.yaml
 
 candidates:
   - id: flutter-course

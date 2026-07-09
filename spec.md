@@ -111,9 +111,11 @@ study next).
   inventory, but that is the *skills* side. The actual JD-*gap* data is a private
   competency map (competencies clustered from logged JDs × frequency × my current
   level, with an explicit gap-ranking) — focus-director ranks against that.
-- **Candidate study-list format.** A plain YAML list of `{id, title, tags}`
-  (`data/study-candidates.yaml`); the agent picks up after `#inbox` capture. A
-  Logseq-page → list transform is a v1 concern.
+- **Candidate study-list format.** A plain YAML list of `{id, title, tags}`;
+  the agent picks up after `#inbox` capture. A Logseq-page → list transform is
+  a v1 concern. *Renamed in Q9 (2026-07-09):* `study-candidates.stub.yaml`
+  (committed example) / `study-candidates.real.yaml` (private), matching the
+  corpus's `.stub`/`.real` scheme.
 - **MCP server home.** Built in *this* repo for v0 (self-contained, testable,
   deployable together). May migrate to the private corpus repo later; the agent
   only depends on the `get_jd_gaps` MCP-tool contract.
@@ -180,7 +182,7 @@ user-question log — demand signals live there; decisions land here).
   the human-triaged queue page (`LTS_QUEUE_PAGE`, default `Learning/Queue`,
   under `LTS_VAULT_PATH`) into study candidates — task-marked bullets only,
   tags from #hashtags + [[refs]] + `route::`. Read-only; capture and triage
-  remain human; `data/my-study.yaml` remains for ad-hoc lists.
+  remain human; `data/study-candidates.real.yaml` remains for ad-hoc lists.
 
 ## Resolved during the v1.5 build (2026-07-08)
 

@@ -14,7 +14,7 @@ tool.
 ```mermaid
 flowchart TD
     corpus[("Private JD-gap corpus<br/>(LTS_CORPUS_PATH)")]
-    list["Triaged queue page — rank --queue<br/>(or data/my-study.yaml)"]
+    list["Triaged queue page — rank --queue<br/>(or data/study-candidates.real.yaml)"]
     rank["rank<br/>what should I study next?"]
     study["Study by SHIPPING an output<br/>(repo, deploy, post — the thesis)"]
     cards["Author bilingual #card blocks<br/>in the Logseq vault"]
@@ -43,7 +43,7 @@ flowchart TD
 
 1. **Capture** study ideas yourself in Logseq `#inbox` — the agent never does.
 2. **Triage** them yourself onto your queue page (`[[Learning/Queue]]`) as
-   task-marked bullets; ad-hoc lists can still go in `data/my-study.yaml`.
+   task-marked bullets; ad-hoc lists can still go in `data/study-candidates.real.yaml`.
 3. **Rank**: `uv run python -m learn_to_ship rank --queue` — study the top
    item; the rationale says which gap it closes and why. Mind the footer:
    uncovered gaps are queue blind spots — `propose --queue` drafts items for
@@ -104,7 +104,7 @@ Queue items are task-marked bullets on the page named by `LTS_QUEUE_PAGE`
 The `LATER/TODO/NOW/DOING` marker makes it an item (untasked bullets are
 prose); tags come from inline `#hashtags`, `[[refs]]`, and the `route::`
 value; ids are stable slugs of the title. Alternatively, keep an ad-hoc YAML
-list (`data/my-study.yaml`, gitignored):
+list (`data/study-candidates.real.yaml`, gitignored):
 
 ```yaml
 candidates:
@@ -115,7 +115,7 @@ candidates:
 
 ```bash
 uv run python -m learn_to_ship                                  # example list
-uv run python -m learn_to_ship --candidates data/my-study.yaml  # your list
+uv run python -m learn_to_ship --candidates data/study-candidates.real.yaml  # your list
 ```
 
 Reading the output:

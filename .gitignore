@@ -12,12 +12,13 @@ dist/
 # Secrets
 .env
 
-# Never commit the real/private JD-gap corpus — only the *.stub.yaml is public.
+# Never commit real/private data — only *.stub.yaml files are public.
 # (See CLAUDE.md "Build in public": agent public, career data private.)
+# One scheme (QUESTIONS.md Q9): *.stub.yaml committed, *.real.yaml private.
+data/*.real.yaml
 data/*.private.yaml
 data/jd-gaps.yaml
-data/jd-gaps.real.yaml
-# Private, personal study lists (real daily-use inputs).
+# Legacy pattern, kept so old personal files can never leak.
 data/my-*.yaml
 # Private usage-evidence trail (rank runs, shipped outputs, recall sessions).
 data/evidence.jsonl

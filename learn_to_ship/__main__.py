@@ -35,7 +35,7 @@ from .models import StudyItem
 from .recall_graph import build_recall_graph
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_CANDIDATES = REPO_ROOT / "data" / "study-candidates.yaml"
+DEFAULT_CANDIDATES = REPO_ROOT / "data" / "study-candidates.stub.yaml"
 
 # Load a gitignored .env (LTS_* settings, LLM API keys) before the graphs
 # run, so settings propagate to the MCP server subprocess and the LLM checker.

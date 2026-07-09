@@ -105,7 +105,7 @@ hosted container can only serve the public stub and never logs usage.
 | `learn_to_ship/server.py` | FastAPI wrapper (rank only); serves `static/index.html` at `/` |
 | `learn_to_ship/static/index.html` | The demo front page — one self-contained file, no build toolchain |
 | `learn_to_ship/__main__.py` | CLI (`rank` default, `recall`, `evidence`); loads `.env`; auto-logs usage |
-| `data/` | Fictional stub corpus (committed) · example candidates (committed) · `my-study.yaml`, `evidence.jsonl` (gitignored) |
+| `data/` | `*.stub.yaml` — fictional, committed (corpus + example candidates) · `*.real.yaml`, `evidence.jsonl` — private, gitignored |
 | `evals/cases.yaml` | Golden eval — candidates across every leverage tier + the exact `expected_order` CI pins |
 | `tests/` | 46 hermetic tests + 2 `live`-marked |
 | `spec.md` / `QUESTIONS.md` / `LOG.md` / `DEPLOY.md` | Scope (source of truth) / demand signals / dated milestones / deploy runbook |
