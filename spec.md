@@ -182,7 +182,7 @@ user-question log — demand signals live there; decisions land here).
   the human-triaged queue page (`LTS_QUEUE_PAGE`, default `Learning/Queue`,
   under `LTS_VAULT_PATH`) into study candidates — task-marked bullets only,
   tags from #hashtags + [[refs]] + `route::`. Read-only; capture and triage
-  remain human; `data/my-study.yaml` remains for ad-hoc lists.
+  remain human; `data/study-candidates.real.yaml` remains for ad-hoc lists.
 
 ## Resolved during the v1.5 build (2026-07-08)
 
