@@ -22,3 +22,8 @@ data/jd-gaps.yaml
 data/my-*.yaml
 # Private usage-evidence trail (rank runs, shipped outputs, recall sessions).
 data/evidence.jsonl
+
+# macOS/iCloud duplicate files ("name 2.ext") — Documents is iCloud-synced and
+# Finder-style duplicates have twice snuck into commits. Never track them.
+* 2.*
+*\ 2/
