@@ -42,10 +42,12 @@ def test_summarize_counts_and_nudges():
     events = [
         {"ts": "2026-07-08T09:00:00", "kind": "rank", "candidates": 8, "top": ["a"]},
         {"ts": "2026-07-08T10:00:00", "kind": "recall", "source": "j.md", "cards": 3, "ok": 2},
+        {"ts": "2026-07-08T10:30:00", "kind": "propose", "gaps": 3, "drafts": 9, "written": 9},
         {"ts": "2026-07-08T11:00:00", "kind": "output", "item": "a", "output": "https://x"},
     ]
     text = evidence.summarize(events)
     assert "rank runs: 1" in text
+    assert "propose runs: 1 — 9 draft(s), 9 delivered to the inbox" in text
     assert "3 card(s) checked, 2 ok" in text
     assert "a → https://x" in text
     assert "consider updating their levels" in text
