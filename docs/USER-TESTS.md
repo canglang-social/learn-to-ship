@@ -15,8 +15,8 @@ user-verified · *(auto)* = also exercised by `pytest -m live`.
 | --- | --- | --- | --- |
 | `rank --queue` against the real corpus | `uv run python -m learn_to_ship rank --queue` | queue items ranked, each citing a real gap with a rationale | ☑ 2026-07-08 |
 | Coverage footer (v1.5) | same command | "Uncovered priority gaps" lists ladder gaps with no queue item | ☑ 2026-07-09 |
-| YAML fallback | `uv run python -m learn_to_ship --candidates data/study-candidates.real.yaml` | same shape, from the file | ☐ |
-| `--json` shape | `uv run python -m learn_to_ship rank --queue --json` | `{"ranked": …, "uncovered": …}` | ☐ |
+| YAML fallback | `uv run python -m learn_to_ship --candidates data/study-candidates.real.yaml` | same shape, from the file | ☑ 2026-07-09 |
+| `--json` shape | `uv run python -m learn_to_ship rank --queue --json` | `{"ranked": …, "uncovered": …}` | ☑ 2026-07-09 |
 
 ## propose
 
@@ -40,7 +40,7 @@ user-verified · *(auto)* = also exercised by `pytest -m live`.
 
 | Behavior | How to test | Expect | Status |
 | --- | --- | --- | --- |
-| Auto-logging | just use rank/recall/propose, then `uv run python -m learn_to_ship evidence` | trail lists your runs with dates | ☐ (3 events already waiting) |
+| Auto-logging | just use rank/recall/propose, then `uv run python -m learn_to_ship evidence` | trail lists your runs with dates | ☑ 2026-07-09 |
 | Record a shipped output | `uv run python -m learn_to_ship evidence --item <id> --output <url> --note "…"` (the id = the slug rank shows) | "Recorded: <id> → <url>" | ☐ |
 | The nudge | `uv run python -m learn_to_ship evidence` again | output listed under its item + "consider updating their levels in your corpus" | ☐ |
 
