@@ -9,6 +9,9 @@ dist/
 # LangGraph dev-server local runtime state
 .langgraph_api/
 
+# Claude Code local worktrees (transient, per-session)
+.claude/worktrees/
+
 # Secrets
 .env
 
